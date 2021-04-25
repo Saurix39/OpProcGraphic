@@ -7,11 +7,15 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route('/data/<numVariables>/<numResticciones>')
+@app.route('/data/<int:numVariables>/<int:numRestricciones>')
 def form_data(numVariables,numRestricciones):
-    return render_template('data.html',numVariables=numVariables,numRestricciones=numRestricciones)
-@app.route('/grafico', methods=['GET'])
+    return render_template("data.html", restricciones = numRestricciones)
+
+@app.route('/grafico', methods=['POST', 'GET'])
 def graficar():
+
+    print(dict(request.form))
+
     restricciones= [] #las restricciones por post
     puntosSoluci = [] #Puntos que conforman el area de solución en coordenadas
     # ciclo for que nos recorra las restricciones

@@ -1,0 +1,19 @@
+
+.form-title{
+    font-size: 20px;
+}
+.in-function{
+    width: 100%;
+    height: 30px;
+    display: flex;
+    flex-flow: row nowrap;
+}
+.in-function > span{
+    min-width: 60px;
+    width: 60px;
+    text-align: center;
+}
+
+.in-function > select{
+    margin: 0px 20px 0px 0px;
+}
