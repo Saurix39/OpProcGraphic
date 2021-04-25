@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+
+{% block titulo %}
+{% endblock %}
+
+{% block header %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css')}}">
+<script type="text/javascript" src="{{ url_for('static', filename='js/data.js')}}">
+</script>
+{% endblock %}
+
+{% block body %}
+
+<div class="row">
+    <div class="col-12">
+        <form id="form-data">
+            <div class="form-group mb-4">
+                <label class="mb-3 form-title" for="objetivo">Seleccione el objetivo de la función</label>
+                <select id="minmax" class="form-control">
+                    <option selected disabled>-- Seleecione --</option>
+                    <option value="max">Maximizar</option>
+                    <option value="min">Minimizar</option>
+                </select>
+            </div>
+            <div class="form-group mb-4">
+                <label class="mb-3 form-title"> Ingrese la funcion objetivo</label>
+                <div class="in-function">
+                    <input id="objFuncionX1" class="form-control objFuncion">
+                    <span>X<sub>1 + </sub></span>
+                    <input id="objFuncionX2" class="form-control objFuncion">
+                    <span>X<sub>2</sub></span>
+                </div>
+            </div>
+            <div class="form-group mb-4">
+                <label class="mb-3 form-title">Restricciones</label>
+                {% for i in range(restricciones) %}
+
+                    <div class="in-function mb-3 Restricciones" >
+                        <input type="number" class="form-control resx1">
+                        <span>x <sub>1</sub> + </span>
+                        <input name="number" class="form-control resx2">
+                        <span>x <sub>2</sub></span>
+                        <select class="form-control resOperand" >
+                            <option value="<="> &le; </option>
+                            <option value=">="> &ge; </option>
+                            <option value="="> &#61; </option>
+                        </select>
+                        <input type="number" class="form-control resResult">
+                    </div>
+
+                {% endfor %}
+
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary w-100">
+                    Enviar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
