@@ -1,0 +1,84 @@
+{% extends 'layout.html'%}
+
+{% block title %}
+Método gráfico
+{% endblock %}
+
+{% block header %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modelo.css')}}">
+{% endblock %}
+
+{% block body %}
+<div class="container" style="height: calc( 100vh - 56px )">
+    <div class="row mt-5">
+        <div class="col-12">
+            <h1>Método gráfico</h1>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-12">
+            <h3>Modelo</h3>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-12">
+            <h3>Tabla</h3>
+            <table class="modelo-table">
+                <thead>
+                    <tr>
+                        <th>Punto</th>
+                        <th>Coordenada X</th>
+                        <th>Coordenada Y</th>
+                        <th>Valor de la función objetivo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>O</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>A</td>
+                        <td>0</td>
+                        <td>500</td>
+                        <td>20000</td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td>750</td>
+                        <td>0</td>
+                        <td>37500</td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>375</td>
+                        <td>250</td>
+                        <td>28750</td>
+                    </tr>
+                    <tr>
+                        <td>D</td>
+                        <td>0</td>
+                        <td>1000</td>
+                        <td>40000</td>
+                    </tr>
+                    <tr>
+                        <td>E</td>
+                        <td>500</td>
+                        <td>0</td>
+                        <td>25000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3>Gráfica</h3>
+            <img src="{{url_for('static', filename="img/grafica.png")}}">
+        </div>
+    </div>
+</div>
+
+{% endblock %}

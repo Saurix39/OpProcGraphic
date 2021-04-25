@@ -1,0 +1,21 @@
+.modelo-table{
+    width: 100%;
+    border-collapse: collapse;
+}
+.modelo-table td, .modelo-table th{
+    height: 50px;
+    padding: 0px 15px ;
+}
+.modelo-table th{
+    background-color: #7952b3;
+    color: #FFF;
+}
+.modelo-table tr{
+    border: 1px solid #DDD;
+}
+.modelo-table tr:nth-child(even){
+    background-color: #fAfAfA;
+}
+.modelo-table tr:hover{
+    background-color: #f2f2f2;
+}

@@ -13,7 +13,14 @@
     width: 60px;
     text-align: center;
 }
-
 .in-function > select{
     margin: 0px 20px 0px 0px;
+}
+.resOperand{
+    max-width: 50px;
+    padding: 0px 0px 0px 0px !important;
+    text-align-last: center;
+}
+.row-container{
+    height: 100%;
 }

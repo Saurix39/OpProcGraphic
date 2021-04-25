@@ -4,60 +4,62 @@
 {% endblock %}
 
 {% block header %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/data.css')}}">
 <script type="text/javascript" src="{{ url_for('static', filename='js/data.js')}}">
 </script>
 {% endblock %}
 
 {% block body %}
-
-<div class="row">
-    <div class="col-12">
-        <form id="form-data">
-            <div class="form-group mb-4">
-                <label class="mb-3 form-title" for="objetivo">Seleccione el objetivo de la función</label>
-                <select id="minmax" class="form-control">
-                    <option selected disabled>-- Seleecione --</option>
-                    <option value="max">Maximizar</option>
-                    <option value="min">Minimizar</option>
-                </select>
-            </div>
-            <div class="form-group mb-4">
-                <label class="mb-3 form-title"> Ingrese la funcion objetivo</label>
-                <div class="in-function">
-                    <input id="objFuncionX1" class="form-control objFuncion">
-                    <span>X<sub>1 + </sub></span>
-                    <input id="objFuncionX2" class="form-control objFuncion">
-                    <span>X<sub>2</sub></span>
+<div class="container" style="height: calc( 100vh - 56px )">
+    <div class="row row-container align-items-center">
+        <div class="col-12">
+            <h1 class="mb-5">Ingrese el modelo matemático</h1>
+            <form id="form-data" method="POST" action="">
+                <div class="form-group mb-4">
+                    <label class="mb-3 form-title" for="objetivo">Seleccione el objetivo de la función</label>
+                    <select id="minmax" class="form-control validate">
+                        <option value="max">Maximizar</option>
+                        <option value="min">Minimizar</option>
+                    </select>
                 </div>
-            </div>
-            <div class="form-group mb-4">
-                <label class="mb-3 form-title">Restricciones</label>
-                {% for i in range(restricciones) %}
+                <div class="form-group mb-4">
+                    <label class="mb-3 form-title"> Ingrese la funcion objetivo</label>
+                    <div class="in-function">
+                        <input id="objFuncionX1" class="form-control objFuncion validate" type="number">
+                        <span>X<sub>1 + </sub></span>
+                        <input id="objFuncionX2" class="form-control objFuncion validate" type="number">
+                        <span>X<sub>2</sub></span>
+                    </div>
+                </div>
+                <div class="form-group mb-5">
+                    <label class="mb-3 form-title">Restricciones</label>
+                    {% for i in range(restricciones) %}
 
-                    <div class="in-function mb-3 Restricciones" >
-                        <input type="number" class="form-control resx1">
+                    <div class="in-function mb-4 Restricciones">
+                        <input type="number" class="form-control resx1 validate">
                         <span>x <sub>1</sub> + </span>
-                        <input name="number" class="form-control resx2">
+                        <input name="number" class="form-control resx2 validate">
                         <span>x <sub>2</sub></span>
-                        <select class="form-control resOperand" >
+                        <select class="form-control resOperand validate">
                             <option value="<="> &le; </option>
                             <option value=">="> &ge; </option>
                             <option value="="> &#61; </option>
                         </select>
-                        <input type="number" class="form-control resResult">
+                        <input type="number" class="form-control resResult validate">
                     </div>
 
-                {% endfor %}
+                    {% endfor %}
 
-            </div>
-            <div class="form-group">
-                <button class="btn btn-primary w-100">
-                    Enviar
-                </button>
-            </div>
-        </form>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary w-100 mb-5" id="btnSent" disabled>
+                        Enviar
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
 
 {% endblock %}

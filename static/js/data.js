@@ -1,14 +1,33 @@
 
-document.addEventListener('DOMContentLoaded', () =>{
+document.addEventListener('DOMContentLoaded', () => {
 
-    let form = document.querySelector("#form-data");
 
-    form.addEventListener('submit', onsubmit);
+    // submitting the form
+    document.querySelector("#form-data").addEventListener('submit', onsubmit);
 
+    // This event enable or disable the button
+    document.querySelector("#form-data").addEventListener('keyup', toggleButton);
 
 })
 
-function sent(data){
+function toggleButton() {
+
+    let toggle = true;
+
+    document.querySelectorAll(".validate").forEach(elem => {
+        if (elem.value == null || elem.value == "") {
+            toggle = false;
+        }
+    });
+
+    if(toggle){
+        document.querySelector("#btnSent").disabled = false;
+    }else{
+        document.querySelector("#btnSent").disabled = true;
+    }
+}
+
+function sent(data) {
     const request = new XMLHttpRequest();
 
     request.open('POST', 'http://127.0.0.1:5000/grafico')
@@ -25,8 +44,8 @@ function sent(data){
     request.send(d)
 }
 
-function onsubmit(event){
-    
+function onsubmit(event) {
+
     event.preventDefault();
 
     data = {
@@ -40,7 +59,7 @@ function onsubmit(event){
     return false;
 }
 
-function getFuncionObjetivo(){
+function getFuncionObjetivo() {
 
     // Get the elements
     const inputs = document.querySelectorAll(".objFuncion");
@@ -50,11 +69,11 @@ function getFuncionObjetivo(){
         "x2": "",
     }
 
-    if(inputs[0].value == null){
+    if (inputs[0].value == null) {
         inputs[0].classList.add('danger');
-    }else if(inputs[1].value == null){
+    } else if (inputs[1].value == null) {
         inputs[1].classList.add('danger');
-    }else{
+    } else {
         f['x1'] = inputs[0].value;
         f['x2'] = inputs[1].value
     }
@@ -63,13 +82,13 @@ function getFuncionObjetivo(){
 }
 
 
-function getRestricciones(){
+function getRestricciones() {
 
     const restricciones = [];
 
     const resFields = document.querySelectorAll(".Restricciones");
 
-    resFields.forEach( elem => {
+    resFields.forEach(elem => {
         restricciones.push({
             "x1": elem.querySelector(".resx1").value,
             "x2": elem.querySelector(".resx2").value,

@@ -7,8 +7,11 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route('/data/<int:numVariables>/<int:numRestricciones>')
-def form_data(numVariables,numRestricciones):
+@app.route('/data', methods=['POST'])
+def data():
+    numVariables = int(request.form.get("numVariables"))
+    numRestricciones = int(request.form.get("numRestricciones"))
+    
     return render_template("data.html", restricciones = numRestricciones)
 
 @app.route('/grafico', methods=['POST', 'GET'])
@@ -48,7 +51,7 @@ def graficar():
     coordenada=ecua.puntCortEcua(ecua2)
     return f"<h1>({coordenada.x}, {coordenada.y} )</h1>"
     '''
-    return "hola"
+    return render_template('metodo.html')
 
 if __name__=="__main__":
     app.run(debug=True)
