@@ -1,7 +1,14 @@
-from modelo.coord import Coord
+'''from modelo.coord import Coord
 
 cord=[Coord(1,1),Coord(2,5)]
 
 if __name__=="__main__":
-    cord1 = Coord(1,1)
-    print(cord1 in cord)
+    print(type(None))
+    a = Coord(1,3)   
+    if a is None:
+        print('Es null')'''
+
+import numpy
+
+li = numpy.ones(range(10)) * 5
+print(li)

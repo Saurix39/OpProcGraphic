@@ -43,8 +43,17 @@ class Ecuacion:
             result = (dicPropio['resultado']*(-1) ) + dicEcua['resultado']
             x = result/x
             y = dicPropio['x']*x + dicPropio['resultado']
+        elif dicPropio['tipo']=='puntx' and dicEcua['tipo']=='puntx':
+            return None 
+        elif dicPropio['tipo']=='punty' and dicEcua['tipo']=='punty':
+            return None
+        elif dicPropio['tipo']=='puntx' and dicEcua['tipo']=='punty':
+            x = dicPropio['resultado']
+            y = dicEcua['resultado']
+        elif dicPropio['tipo']=='punty' and dicEcua['tipo']=='puntx':
+            x = dicEcua['resultado']
+            y = dicPropio['resultado'] 
         elif dicPropio['tipo']=='puntx' or dicEcua['tipo']=='puntx':
-            # dicecua = y= 12x + 12
             if dicPropio['tipo'] == 'puntx':
                 x = dicPropio['resultado']
                 y = dicEcua['x']*x + dicEcua['resultado']
@@ -52,15 +61,14 @@ class Ecuacion:
                 x = dicEcua['resultado']
                 y = dicPropio['x']*x + dicPropio['resultado']
         elif dicPropio['tipo'] == 'punty' or dicEcua['tipo'] == 'punty':
-            # dicecua = x = 12y + 200
             if dicPropio['tipo']=='punty':
                 y = dicPropio['resultado']
-                x = ((-1)*dicEcua.y*y/ (dicEcua.x if dicEcua.x >0 else 1)) + (dicEcua.resultado/ (dicEcua.x if dicEcua.x >0 else 1))
+                x = ((-1)*ecua.y*y/ (ecua.x if ecua.x >0 else 1)) + (ecua.resultado/ (ecua.x if ecua.x >0 else 1))
             else:
                 y = dicEcua['resultado']
                 x = ((-1)*self.y*y / (self.x if self.x >0 else 1)) + self.resultado/ (self.x if self.x>0 else 1)
         #import pdb; pdb.set_trace()
-        return Coord(round(x),round(y))
+        return Coord(round(x,3),round(y,3))
 
     def puntCortX(self):
         if self.x == 0:
@@ -74,6 +82,15 @@ class Ecuacion:
         else:
             y=self.resultado/self.y
             return Coord(0,y)
+    def __str__(self):
+        string = ""
+        if self.x != 0 and self.y != 0:
+            string = f"{self.x}X + {self.y}Y {self.tipo} {self.resultado}"
+        elif self.x == 0:
+            string = f"{self.y}Y {self.tipo} {self.resultado}"
+        elif self.y == 0:
+            string = f"{self.x}X {self.tipo} {self.resultado}"
+        return string
 
 
 
