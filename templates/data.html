@@ -25,9 +25,9 @@
                 <div class="form-group mb-4">
                     <label class="mb-3 form-title"> Ingrese la funcion objetivo</label>
                     <div class="in-function">
-                        <input id="objFuncionX1" class="form-control objFuncion validate" type="number">
+                        <input id="objFuncionX1" class="form-control objFuncion validate" type="number" step=".01">
                         <span>X<sub>1 + </sub></span>
-                        <input id="objFuncionX2" class="form-control objFuncion validate" type="number">
+                        <input id="objFuncionX2" class="form-control objFuncion validate" type="number" step=".01">
                         <span>X<sub>2</sub></span>
                     </div>
                 </div>
@@ -36,16 +36,16 @@
                     {% for i in range(restricciones) %}
 
                     <div class="in-function mb-4 Restricciones">
-                        <input type="number" class="form-control resx1 validate">
+                        <input type="number" class="form-control resx1 validate" step=".01">
                         <span>x <sub>1</sub> + </span>
-                        <input name="number" class="form-control resx2 validate">
+                        <input name="number" class="form-control resx2 validate" step=".01">
                         <span>x <sub>2</sub></span>
                         <select class="form-control resOperand validate">
                             <option value="<="> &le; </option>
                             <option value=">="> &ge; </option>
                             <option value="="> &#61; </option>
                         </select>
-                        <input type="number" class="form-control resResult validate">
+                        <input type="number" class="form-control resResult validate" step=".01">
                     </div>
 
                     {% endfor %}
