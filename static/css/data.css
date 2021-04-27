@@ -1,9 +1,21 @@
+body{
+    background-image: url('../img/page/hero-colombia.svg');
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
 .form-bg{
     background-color: #FFF;
     padding: 55px;
+    border-radius: 25px;
+    box-shadow:  0px 0px 15px rgba(0,0,0,0.4);
+}
+.form-bg > h1{
+    color: #023365!important;
 }
 .form-title{
     font-size: 20px;
+    color: #023365!important;
 }
 .in-function{
     width: 100%;
@@ -26,4 +38,7 @@
 }
 .row-container{
     height: 100%;
+}
+#btnSent{
+    background-color: #4480D2;
 }
