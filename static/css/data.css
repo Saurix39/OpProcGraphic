@@ -1,4 +1,7 @@
-
+.form-bg{
+    background-color: #FFF;
+    padding: 55px;
+}
 .form-title{
     font-size: 20px;
 }
