@@ -17,6 +17,10 @@ def data():
     
     return render_template("data.html", restricciones = numRestricciones)
 
+@app.route('/grafico2', methods=['POST', 'GET'])
+def graficar2():
+    return render_template("metodo.html")
+
 @app.route('/grafico', methods=['POST', 'GET'])
 def graficar():
 

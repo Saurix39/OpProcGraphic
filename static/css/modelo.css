@@ -1,3 +1,92 @@
+
+.bg-top{
+
+    width: 100%; 
+    height: 300px;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+
+    background-image: url('../img/page/night.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.page-title{
+    color: #FFF;
+}
+.btn-styles{
+    display: flex;
+    position: absolute;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+
+    width: 60px;
+    height: 60px;
+
+    border-radius: 80px;
+    background-color: #003868;
+    cursor: pointer;
+
+    top: 50%;
+    transform: translateY(-60px);
+}
+.btn-styles > i{ 
+    font-size: 30px;
+    color: #00E7B1;
+}
+.btn-left{
+    left: 20px;
+}
+.btn-right{
+    right: 20px;
+}
+.container-info{
+    
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: calc(100vh - 300px);
+    overflow: hidden;
+    position: relative;
+    padding-top: 70px;
+}
+.slider{
+    width: 300%;
+    height: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    transition: 1s;
+}
+.info-page{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    width: calc( 100% / 3);
+    padding: 0px 80px;
+    height: 100%;
+}
+.selected{
+    display: flex !important;
+}
+.next{
+    display: flex !important;
+}
+.form-title{
+    font-size: 30px;
+    color: #00406A;
+    text-align: center;
+}
+
+.modelo-table{
+    margin-top: 60px;
+}
 table{
     border-collapse: collapse;
 }
