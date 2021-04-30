@@ -100,7 +100,27 @@ def graficar():
     plt.ylabel("X2")
     plt.savefig('static/img/grafica.png')
     plt.clf()
+    #Estos son los datos que debe incluir la tabla
+    datos_tabla=tabla(puntosSoli,func_obj, func_obj_ecua)
     return render_template('metodo.html')
+
+def tabla(puntSoli, func_obj, func_obj_ecua):
+    data={}
+    puntos=[]
+    i=1
+    for punt in puntSoli:
+        valor = int(func_obj['x1'])*punt.x + int(func_obj['x2'])*punt.y
+        dicpunt={
+            'Punto':f'{i}',
+            'Coordenada X (X1)':f'{punt.x}',
+            'Coordenada Y (X2)':f'{punt.y}',
+            'Valor de la función objetivo (Z)':f'{valor}',
+            'Solu': 1 if valor == func_obj_ecua.resultado else 0
+            }
+        puntos.append(dicpunt)
+        i+=1
+    data['puntos']=puntos
+    return data
 
 if __name__=="__main__":
     app.run(debug=True)
