@@ -32,8 +32,8 @@ function sent(data) {
 
     request.open('POST', 'http://127.0.0.1:5000/grafico')
 
-    request.onload = () => {
-        console.log("Works");
+    request.onload = (data) => {
+        console.log(data);
     }
 
     const d = new FormData();
@@ -46,17 +46,19 @@ function sent(data) {
 
 function onsubmit(event) {
 
-    event.preventDefault();
+    //event.preventDefault();
 
     data = {
         "Minmax": document.querySelector("#minmax").value,
         "Funcion objetivo": getFuncionObjetivo(),
         "Restricciones": getRestricciones()
     }
-    console.log(data)
-    sent(data)
+    
+    document.querySelector("#hiddenInput").value = JSON.stringify(data)
 
-    return false;
+    //sent(data)
+
+    return true;
 }
 
 function getFuncionObjetivo() {

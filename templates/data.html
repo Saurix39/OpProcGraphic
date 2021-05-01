@@ -17,7 +17,7 @@
     <div class="row row-container align-items-center">
         <div class="col-12 form-bg">
             
-            <form id="form-data" method="POST" action="">
+            <form id="form-data" method="POST" action="{{ url_for('grafico') }}">
                 <div class="form-group mb-4">
                     <label class="mb-3 form-title" for="objetivo">Seleccione el objetivo de la función</label>
                     <select id="minmax" class="form-control validate">
@@ -59,6 +59,7 @@
                         Enviar
                     </button>
                 </div>
+                <input type="hidden" name="hidden-data" id="hiddenInput">
             </form>
         </div>
     </div>

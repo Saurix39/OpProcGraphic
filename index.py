@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from modelo.ecuacion import Ecuacion
 import numpy as np
 from matplotlib import pyplot as plt
@@ -17,21 +17,21 @@ def data():
     
     return render_template("data.html", restricciones = numRestricciones)
 
-@app.route('/grafico2', methods=['POST', 'GET'])
-def graficar2():
-    return render_template("metodo.html")
-
 @app.route('/grafico', methods=['POST', 'GET'])
-def graficar():
+def grafico():
+    print(request.form.get('hidden-data'))
 
-    func_obj = json.loads(request.form.get('Fo'))
-    min_max = request.form.get('MinMax')
+    data = json.loads(request.form.get('hidden-data'))
+    
+
+    func_obj = data.get('Funcion objetivo')
+    min_max = data.get('Minmax')
     restricciones= [] #las restricciones por post
     puntosCorte = [] #Puntos que corte
     puntosSoli = [] #Puntos de solucion
     # ciclo for que nos recorra las restricciones
 
-    restric = json.loads(request.form.get('Restr'))
+    restric = data.get('Restricciones')
     for rest in restric:
         restriccion=Ecuacion(float(rest['x1']),float(rest['x2']),rest['op'],float(rest['result']))
         restricciones.append(restriccion)
@@ -106,7 +106,8 @@ def graficar():
     plt.clf()
     #Estos son los datos que debe incluir la tabla
     datos_tabla=tabla(puntosSoli,func_obj, func_obj_ecua)
-    return render_template('metodo.html')
+
+    return render_template('metodo.html', data_table = datos_tabla, restricciones= restricciones, fo = func_obj_ecua )
 
 def tabla(puntSoli, func_obj, func_obj_ecua):
     data={}

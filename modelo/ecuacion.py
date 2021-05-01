@@ -91,6 +91,17 @@ class Ecuacion:
         elif self.y == 0:
             string = f"{self.x}X {self.tipo} {self.resultado}"
         return string
+    
+    def __html__(self):
+        element = {"=": "&#61;", "<=": "&le;", ">=": "&ge;"}
+        string = ""
+        if self.x != 0 and self.y != 0:
+            string = f"{self.x}X + {self.y}Y {element[self.tipo]} {self.resultado}"
+        elif self.x == 0:
+            string = f"{self.y}Y {element[self.tipo]} {self.resultado}"
+        elif self.y == 0:
+            string = f"{self.x}X {element[self.tipo]} {self.resultado}"
+        return string
 
 
 
