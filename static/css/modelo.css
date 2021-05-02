@@ -69,7 +69,7 @@
     flex-flow: column nowrap;
     align-items: center;
     width: calc( 100% / 3);
-    padding: 0px 80px;
+    padding: 0px 100px;
     height: 100%;
 }
 .selected{
@@ -109,8 +109,13 @@ table tr:hover{
 
 .modelo-sol{
     width: 100%;
+    margin-top: 60px;
 }
 .modelo-sol th{
-    background-color: #7952b3;
-    color: #FFF;
+    background-color: #003868;
+    color:rgba(0,231,177,0.9);
+}
+.row-selected{
+    background-color: rgba(0,231,177,0.9) !important;
+    color: #003868 !important;
 }

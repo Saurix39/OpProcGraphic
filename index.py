@@ -1,21 +1,26 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from modelo.ecuacion import Ecuacion
 import numpy as np
 from matplotlib import pyplot as plt
 import json
 
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+numRestricciones = 1
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/data', methods=['POST'])
+@app.route('/data', methods=['POST', 'GET'])
 def data():
-    numVariables = int(request.form.get("numVariables"))
-    numRestricciones = int(request.form.get("numRestricciones"))
-    
-    return render_template("data.html", restricciones = numRestricciones)
+    if request.method == 'POST':
+        numVariables = int(request.form.get("numVariables"))
+        session['numRes'] = int(request.form.get("numRestricciones"))    
+        return render_template("data.html", restricciones = session['numRes'])
+    else:
+        flash(request.args.get("error"), "alert-danger")
+        return render_template("data.html", restricciones = session['numRes'])
 
 @app.route('/grafico', methods=['POST', 'GET'])
 def grafico():
@@ -48,7 +53,7 @@ def grafico():
             puntosSoli.append(punt)
             
     if len(puntosSoli) == 0:
-        return "Mateo retorne un template o mensaje que diga que no hay puntos de solucion c:"
+        return redirect(url_for('data', error = "El modelo no tiene solución"))
     min = int(func_obj['x1'])*puntosSoli[0].x + int(func_obj['x2'])*puntosSoli[0].y
     max = int(func_obj['x1'])*puntosSoli[0].x + int(func_obj['x2'])*puntosSoli[0].y
     punt_min = puntosSoli[0]
