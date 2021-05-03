@@ -3,6 +3,7 @@ from modelo.ecuacion import Ecuacion
 import numpy as np
 from matplotlib import pyplot as plt
 import json
+import datetime
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -54,12 +55,12 @@ def grafico():
             
     if len(puntosSoli) == 0:
         return redirect(url_for('data', error = "El modelo no tiene solución"))
-    min = int(func_obj['x1'])*puntosSoli[0].x + int(func_obj['x2'])*puntosSoli[0].y
-    max = int(func_obj['x1'])*puntosSoli[0].x + int(func_obj['x2'])*puntosSoli[0].y
+    min = float(func_obj['x1'])*puntosSoli[0].x + float(func_obj['x2'])*puntosSoli[0].y
+    max = float(func_obj['x1'])*puntosSoli[0].x + float(func_obj['x2'])*puntosSoli[0].y
     punt_min = puntosSoli[0]
     punt_max = puntosSoli[0]
     for punt in puntosSoli:
-        punto = int(func_obj['x1'])*punt.x + int(func_obj['x2'])*punt.y
+        punto = float(func_obj['x1'])*punt.x + float(func_obj['x2'])*punt.y
         if punto < min:
             min = punto
             punt_min = punt
@@ -107,19 +108,20 @@ def grafico():
     plt.legend(legend,shadow=True, title="Restricciones", framealpha=0.5)
     plt.xlabel("X1")
     plt.ylabel("X2")
-    plt.savefig('static/img/grafica.png')
-    plt.clf()
+    nombre='static/img/grafica'+str(datetime.datetime.now().timestamp())+'.png'
+    plt.savefig(nombre)
+    plt.close()
     #Estos son los datos que debe incluir la tabla
     datos_tabla=tabla(puntosSoli,func_obj, func_obj_ecua)
 
-    return render_template('metodo.html', data_table = datos_tabla, restricciones= restricciones, fo = func_obj_ecua )
+    return render_template('metodo.html', data_table = datos_tabla, restricciones= restricciones, fo = func_obj_ecua, nom=nombre)
 
 def tabla(puntSoli, func_obj, func_obj_ecua):
     data={}
     puntos=[]
     i=1
     for punt in puntSoli:
-        valor = int(func_obj['x1'])*punt.x + int(func_obj['x2'])*punt.y
+        valor = float(func_obj['x1'])*punt.x + float(func_obj['x2'])*punt.y
         dicpunt={
             'Punto':f'{i}',
             'Coordenada X (X1)':f'{punt.x}',
