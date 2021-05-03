@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from modelo.ecuacion import Ecuacion
 import numpy as np
 from matplotlib import pyplot as plt
+from modelo.coord import Coord
 import json
 import datetime
 
@@ -25,7 +26,7 @@ def data():
 
 @app.route('/grafico', methods=['POST', 'GET'])
 def grafico():
-    print(request.form.get('hidden-data'))
+    #print(request.form.get('hidden-data'))
 
     data = json.loads(request.form.get('hidden-data'))
     
@@ -41,7 +42,12 @@ def grafico():
     for rest in restric:
         restriccion=Ecuacion(float(rest['x1']),float(rest['x2']),rest['op'],float(rest['result']))
         restricciones.append(restriccion)
+    puntosCorte.append(Coord(0,0))
     for rest in restricciones:
+        if rest.puntCortX() is not None:
+            puntosCorte.append(rest.puntCortX())
+        if rest.puntCortY() is not None:
+            puntosCorte.append(rest.puntCortY())
         for rest2 in restricciones:
             if rest != rest2:
                 coord=rest.puntCortEcua(rest2)

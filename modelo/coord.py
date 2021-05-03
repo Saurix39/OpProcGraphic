@@ -10,16 +10,13 @@ class Coord:
         return f"({self.x}, {self.y})"
     def coord_restric(self, restric):
         for res in restric:
-            resizc = self.x*res.x + self.y*res.y
+            resizc = round(self.x*res.x + self.y*res.y,2)
             if self.x < 0 or self.y < 0:
                 return False
-            if res.tipo == '<=':
-                if resizc > res.resultado:
-                    return False
-            elif res.tipo == '>=':
-                if resizc < res.resultado:
-                    return False
-            elif res.tipo == '=':
-                if resizc != res.resultado:
-                    return False
+            if res.tipo == '<=' and resizc > res.resultado:
+                return False
+            elif res.tipo == '>=' and resizc < res.resultado:
+                return False
+            elif res.tipo == '=' and resizc != res.resultado:
+                return False
         return True
