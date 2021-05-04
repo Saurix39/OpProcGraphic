@@ -33,6 +33,7 @@ def grafico():
 
     func_obj = data.get('Funcion objetivo')
     min_max = data.get('Minmax')
+
     restricciones= [] #las restricciones por post
     puntosCorte = [] #Puntos que corte
     puntosSoli = [] #Puntos de solucion
@@ -120,7 +121,7 @@ def grafico():
     #Estos son los datos que debe incluir la tabla
     datos_tabla=tabla(puntosSoli,func_obj, func_obj_ecua)
 
-    return render_template('metodo.html', data_table = datos_tabla, restricciones= restricciones, fo = func_obj_ecua, nom=nombre)
+    return render_template('metodo.html', data_table = datos_tabla, restricciones= restricciones, fo = func_obj_ecua, nom=nombre, MaxMin= "Maximizar" if min_max == "max" else "Minimizar")
 
 def tabla(puntSoli, func_obj, func_obj_ecua):
     data={}
