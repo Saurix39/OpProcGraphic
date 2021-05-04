@@ -6,17 +6,17 @@ class Ecuacion:
         self.tipo=tipo
         self.resultado=resultado
     def coordx(self):
-        return self.resultado/self.x if self.x > 0 else self.resultado
+        return self.resultado/self.x if self.x != 0 else self.resultado
     def coordy(self):
-        return self.resultado/self.y if self.y > 0 else self.resultado
+        return self.resultado/self.y if self.y != 0 else self.resultado
     def funcdesp(self):
         #la y no se incluye porque se obvia que se despeja y
         #25x+2y = 600 --- ejemplo
         #y= -15x + 5
         if self.y != 0 and self.x !=0:
             return {
-                'x':((-1)*self.x)/ (self.y if self.y >0 else 1),
-                'resultado':self.resultado/(self.y if self.y >0 else 1),
+                'x':((-1)*self.x)/ (self.y if self.y !=0 else 1),
+                'resultado':self.resultado/(self.y if self.y !=0 else 1),
                 'tipo': 'normal'
             }
         elif self.y==0:
@@ -63,10 +63,10 @@ class Ecuacion:
         elif dicPropio['tipo'] == 'punty' or dicEcua['tipo'] == 'punty':
             if dicPropio['tipo']=='punty':
                 y = dicPropio['resultado']
-                x = ((-1)*ecua.y*y/ (ecua.x if ecua.x >0 else 1)) + (ecua.resultado/ (ecua.x if ecua.x >0 else 1))
+                x = ((-1)*ecua.y*y/ (ecua.x if ecua.x !=0 else 1)) + (ecua.resultado/ (ecua.x if ecua.x !=0 else 1))
             else:
                 y = dicEcua['resultado']
-                x = ((-1)*self.y*y / (self.x if self.x >0 else 1)) + self.resultado/ (self.x if self.x>0 else 1)
+                x = ((-1)*self.y*y / (self.x if self.x !=0 else 1)) + self.resultado/ (self.x if self.x!=0 else 1)
         #import pdb; pdb.set_trace()
         return Coord(round(x,3),round(y,3))
 
@@ -92,6 +92,11 @@ class Ecuacion:
             string = f"{self.x}X {self.tipo} {self.resultado}"
         return string
     
+    def pedPositiv(self):
+        if (((-1)*self.x)/(self.y if self.y != 0 else 1)) > 0 and self.x != 0 and self.y != 0:
+            return True
+        return False
+
     def __html__(self):
         element = {"=": "&#61;", "<=": "&le;", ">=": "&ge;"}
         string = ""

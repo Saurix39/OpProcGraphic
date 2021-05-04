@@ -67,7 +67,7 @@ def grafico():
     punt_min = puntosSoli[0]
     punt_max = puntosSoli[0]
     for punt in puntosSoli:
-        punto = float(func_obj['x1'])*punt.x + float(func_obj['x2'])*punt.y
+        punto = round(float(func_obj['x1'])*punt.x + float(func_obj['x2'])*punt.y,2)
         if punto < min:
             min = punto
             punt_min = punt
@@ -86,7 +86,10 @@ def grafico():
     legend = []
     plt.grid()
     for res in restricciones:
-        if res.puntCortX() is None:
+        if res.pedPositiv():
+            x=[0,max_range_x]
+            y=[res.resultado,((res.x*(-1))*(max_range_x)+res.resultado)/(res.y if res.y != 0 else 1)]
+        elif res.puntCortX() is None:
             x = [0, max_range_x]
             y = [res.puntCortY().y, res.puntCortY().y]
         elif res.puntCortY() is None:
@@ -128,7 +131,7 @@ def tabla(puntSoli, func_obj, func_obj_ecua):
     puntos=[]
     i=1
     for punt in puntSoli:
-        valor = float(func_obj['x1'])*punt.x + float(func_obj['x2'])*punt.y
+        valor = round(float(func_obj['x1'])*punt.x + float(func_obj['x2'])*punt.y,2)
         dicpunt={
             'Punto':f'{i}',
             'Coordenada X (X1)':f'{punt.x}',
