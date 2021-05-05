@@ -55,7 +55,6 @@ function onsubmit(event) {
     }
     
     document.querySelector("#hiddenInput").value = JSON.stringify(data)
-
     //sent(data)
 
     return true;
@@ -76,8 +75,8 @@ function getFuncionObjetivo() {
     } else if (inputs[1].value == null) {
         inputs[1].classList.add('danger');
     } else {
-        f['x1'] = inputs[0].value;
-        f['x2'] = inputs[1].value
+        f['x1'] = toDecimal(inputs[0].value);
+        f['x2'] = toDecimal(inputs[1].value);
     }
 
     return f;
@@ -92,13 +91,24 @@ function getRestricciones() {
 
     resFields.forEach(elem => {
         restricciones.push({
-            "x1": elem.querySelector(".resx1").value,
-            "x2": elem.querySelector(".resx2").value,
+            "x1": toDecimal(elem.querySelector(".resx1").value),
+            "x2": toDecimal(elem.querySelector(".resx2").value),
             "op": elem.querySelector(".resOperand").value,
-            "result": elem.querySelector(".resResult").value
+            "result": toDecimal(elem.querySelector(".resResult").value)
         });
     });
 
     return restricciones;
 
+}
+
+function toDecimal(frac){
+
+    let total = frac;
+    if (frac.search("/") != -1){
+        const numbers = frac.split("/");
+        total = parseFloat(numbers[0]) / parseFloat(numbers[1]);
+    }
+    
+    return total
 }
