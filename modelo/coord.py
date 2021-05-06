@@ -20,3 +20,17 @@ class Coord:
             elif res.tipo == '=' and resizc != res.resultado:
                 return False
         return True
+    def ecuaPerte(self, punt2, restricciones):
+        for restric in restricciones:
+            func_desp=restric.funcdesp()
+            if func_desp['tipo']=='normal' and func_desp['x']*self.x + func_desp['resultado'] >= self.y-0.2 and func_desp['x']*self.x + func_desp['resultado'] <= self.y+0.2 and func_desp['x']*punt2.x + func_desp['resultado'] >= punt2.y-0.2 and func_desp['x']*punt2.x + func_desp['resultado'] <= punt2.y+0.2:
+                return True
+            elif func_desp['tipo']=='puntx' and func_desp['resultado']>=self.x-0.2 and func_desp['resultado']<=self.x+0.2 and func_desp['resultado']>=punt2.x-0.2 and func_desp['resultado']<=punt2.x+0.2:
+                return True
+            elif func_desp['tipo']=='punty' and func_desp['resultado']>=self.y-0.2 and func_desp['resultado']<=self.y+0.2 and func_desp['resultado']>=punt2.y-0.2 and func_desp['resultado']<=punt2.y+0.2:
+                return True
+            elif self.y == 0 and punt2.y==0:
+                return True
+            elif self.x==0 and punt2.x==0:
+                return True
+        return False

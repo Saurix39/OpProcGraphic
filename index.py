@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from modelo.ecuacion import Ecuacion
 import numpy as np
 from matplotlib import pyplot as plt
+from matplotlib.patches import Polygon
 from modelo.coord import Coord
 import json
 import datetime
@@ -33,6 +34,8 @@ def grafico():
 
     func_obj = data.get('Funcion objetivo')
     min_max = data.get('Minmax')
+
+    fig, ax=plt.subplots()
 
     restricciones= [] #las restricciones por post
     puntosCorte = [] #Puntos que corte
@@ -84,7 +87,7 @@ def grafico():
             max_range_y = res.puntCortY().y
     
     legend = []
-    plt.grid()
+    ax.grid()
     for res in restricciones:
         if res.pedPositiv():
             x=[0,max_range_x]
@@ -99,11 +102,11 @@ def grafico():
             x = [res.puntCortX().x, res.puntCortY().x]
             y = [res.puntCortX().y, res.puntCortY().y]
         legend.append(res.__str__())
-        plt.plot(x,y)
+        ax.plot(x,y)
     
     
     for solu in puntosSoli:
-        plt.plot(solu.x, solu.y, marker="o", color="black")
+        ax.plot(solu.x, solu.y, marker="o", color="black")
     
     if min_max == "min":
         func_obj_ecua = Ecuacion(float(func_obj['x1']), float(func_obj['x2']), "=", min)
@@ -112,10 +115,15 @@ def grafico():
     
     f_o_x = [func_obj_ecua.puntCortX().x, func_obj_ecua.puntCortY().x]
     f_o_y = [func_obj_ecua.puntCortX().y, func_obj_ecua.puntCortY().y]
-    plt.plot(f_o_x,f_o_y, color="black")
+    ax.plot(f_o_x,f_o_y, color="black")
+    puntosSoli = reordenarpunt(puntosSoli,restricciones)
+    if resmax(restricciones):
+        puntosSoli.append(Coord(max_range_x,max_range_y))
+    areaSolu = Polygon([[punt.x,punt.y] for punt in puntosSoli], alpha=0.2,facecolor="Green",edgecolor="green",linewidth=2)
+    ax.add_patch(areaSolu)
     legend.append("FO: "+func_obj_ecua.__str__())
 
-    plt.legend(legend,shadow=True, title="Restricciones", framealpha=0.5)
+    ax.legend(legend,shadow=True, title="Restricciones", framealpha=0.5)
     plt.xlabel("X1")
     plt.ylabel("X2")
     nombre='static/img/grafica'+str(datetime.datetime.now().timestamp())+'.png'
@@ -126,6 +134,26 @@ def grafico():
 
     return render_template('metodo.html', data_table = datos_tabla, restricciones= restricciones, fo = func_obj_ecua, nom=nombre, MaxMin= "Maximizar" if min_max == "max" else "Minimizar")
 
+def resmax(restricciones):
+    for res in restricciones:
+        if res.tipo != ">=":
+            return False
+    return True
+
+def reordenarpunt(puntosSoli, restricciones):
+    puntosOrde=[]
+    puntosOrde.append(puntosSoli[0])
+    puntosSoli.pop(0)
+    cont=0
+    while len(puntosSoli)!=0:
+        if puntosOrde[len(puntosOrde)-1].ecuaPerte(puntosSoli[cont],restricciones):
+            puntosOrde.append(puntosSoli[cont])
+            puntosSoli.pop(cont)
+        else:
+            cont=cont+1
+        if cont==len(puntosSoli):
+            cont=0
+    return puntosOrde    
 def tabla(puntSoli, func_obj, func_obj_ecua):
     data={}
     puntos=[]
