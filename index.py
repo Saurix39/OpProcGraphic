@@ -27,12 +27,13 @@ def data():
 
 @app.route('/grafico', methods=['POST', 'GET'])
 def grafico():
-    #print(request.form.get('hidden-data'))
 
     data = json.loads(request.form.get('hidden-data'))
     
-
+    
     func_obj = data.get('Funcion objetivo')
+    func_obj_x1 = round(float(func_obj['x1']),3)
+    func_obj_x2 = round(float(func_obj['x2']),3)
     min_max = data.get('Minmax')
 
     fig, ax=plt.subplots()
@@ -44,7 +45,7 @@ def grafico():
 
     restric = data.get('Restricciones')
     for rest in restric:
-        restriccion=Ecuacion(float(rest['x1']),float(rest['x2']),rest['op'],float(rest['result']))
+        restriccion=Ecuacion(round(float(rest['x1']),3),round(float(rest['x2']),3),rest['op'],round(float(rest['result']),3))
         restricciones.append(restriccion)
     puntosCorte.append(Coord(0,0))
     for rest in restricciones:
@@ -65,12 +66,12 @@ def grafico():
             
     if len(puntosSoli) == 0:
         return redirect(url_for('data', error = "El modelo no tiene solución"))
-    min = float(func_obj['x1'])*puntosSoli[0].x + float(func_obj['x2'])*puntosSoli[0].y
-    max = float(func_obj['x1'])*puntosSoli[0].x + float(func_obj['x2'])*puntosSoli[0].y
+    min = func_obj_x1*puntosSoli[0].x + func_obj_x2*puntosSoli[0].y
+    max = func_obj_x1*puntosSoli[0].x + func_obj_x2*puntosSoli[0].y
     punt_min = puntosSoli[0]
     punt_max = puntosSoli[0]
     for punt in puntosSoli:
-        punto = round(float(func_obj['x1'])*punt.x + float(func_obj['x2'])*punt.y,2)
+        punto = round(func_obj_x1*punt.x + func_obj_x2*punt.y,2)
         if punto < min:
             min = punto
             punt_min = punt
@@ -109,13 +110,15 @@ def grafico():
         ax.plot(solu.x, solu.y, marker="o", color="black")
     
     if min_max == "min":
-        func_obj_ecua = Ecuacion(float(func_obj['x1']), float(func_obj['x2']), "=", min)
+        func_obj_ecua = Ecuacion(func_obj_x1, func_obj_x2, "=", min)
     elif min_max == "max":
-        func_obj_ecua = Ecuacion(float(func_obj['x1']), float(func_obj['x2']), "=", max)
+        func_obj_ecua = Ecuacion(func_obj_x1, func_obj_x2, "=", max)
     
     f_o_x = [func_obj_ecua.puntCortX().x, func_obj_ecua.puntCortY().x]
     f_o_y = [func_obj_ecua.puntCortX().y, func_obj_ecua.puntCortY().y]
     ax.plot(f_o_x,f_o_y, color="black")
+    #Estos son los datos que debe incluir la tabla
+    datos_tabla=tabla(puntosSoli,func_obj, func_obj_ecua)
     puntosSoli = reordenarpunt(puntosSoli,restricciones)
     if resmax(restricciones):
         puntosSoli.append(Coord(max_range_x,max_range_y))
@@ -129,8 +132,6 @@ def grafico():
     nombre='static/img/grafica'+str(datetime.datetime.now().timestamp())+'.png'
     plt.savefig(nombre)
     plt.close()
-    #Estos son los datos que debe incluir la tabla
-    datos_tabla=tabla(puntosSoli,func_obj, func_obj_ecua)
 
     return render_template('metodo.html', data_table = datos_tabla, restricciones= restricciones, fo = func_obj_ecua, nom=nombre, MaxMin= "Maximizar" if min_max == "max" else "Minimizar")
 
