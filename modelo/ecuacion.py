@@ -68,7 +68,7 @@ class Ecuacion:
                 y = dicEcua['resultado']
                 x = ((-1)*self.y*y / (self.x if self.x !=0 else 1)) + self.resultado/ (self.x if self.x!=0 else 1)
         #import pdb; pdb.set_trace()
-        return Coord(round(x,3),round(y,3))
+        return Coord(round(x,6),round(y,6))
 
     def puntCortX(self):
         if self.x == 0:
@@ -85,11 +85,11 @@ class Ecuacion:
     def __str__(self):
         string = ""
         if self.x != 0 and self.y != 0:
-            string = f"{self.x}X + {self.y}Y {self.tipo} {self.resultado}"
+            string = f"{round(self.x,3)}X + {round(self.y,3)}Y {self.tipo} {round(self.resultado,3)}"
         elif self.x == 0:
-            string = f"{self.y}Y {self.tipo} {self.resultado}"
+            string = f"{round(self.y,3)}Y {self.tipo} {round(self.resultado,3)}"
         elif self.y == 0:
-            string = f"{self.x}X {self.tipo} {self.resultado}"
+            string = f"{round(self.x,3)}X {self.tipo} {round(self.resultado,3)}"
         return string
     
     def pedPositiv(self):
@@ -101,11 +101,11 @@ class Ecuacion:
         element = {"=": "&#61;", "<=": "&le;", ">=": "&ge;"}
         string = ""
         if self.x != 0 and self.y != 0:
-            string = f"{self.x}X + {self.y}Y {element[self.tipo]} {self.resultado}"
+            string = f"{round(self.x,3)}X + {round(self.y,3)}Y {element[self.tipo]} {round(self.resultado,3)}"
         elif self.x == 0:
-            string = f"{self.y}Y {element[self.tipo]} {self.resultado}"
+            string = f"{round(self.y,3)}Y {element[self.tipo]} {round(self.resultado,3)}"
         elif self.y == 0:
-            string = f"{self.x}X {element[self.tipo]} {self.resultado}"
+            string = f"{round(self.x,3)}X {element[self.tipo]} {round(self.resultado,3)}"
         return string
 
 

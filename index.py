@@ -32,8 +32,8 @@ def grafico():
     
     
     func_obj = data.get('Funcion objetivo')
-    func_obj_x1 = round(float(func_obj['x1']),3)
-    func_obj_x2 = round(float(func_obj['x2']),3)
+    func_obj_x1 = float(func_obj['x1'])
+    func_obj_x2 = float(func_obj['x2'])
     min_max = data.get('Minmax')
 
     fig, ax=plt.subplots()
@@ -45,7 +45,7 @@ def grafico():
 
     restric = data.get('Restricciones')
     for rest in restric:
-        restriccion=Ecuacion(round(float(rest['x1']),3),round(float(rest['x2']),3),rest['op'],round(float(rest['result']),3))
+        restriccion=Ecuacion(float(rest['x1']),float(rest['x2']),rest['op'],float(rest['result']))
         restricciones.append(restriccion)
     puntosCorte.append(Coord(0,0))
     for rest in restricciones:
@@ -163,8 +163,8 @@ def tabla(puntSoli, func_obj, func_obj_ecua):
         valor = round(float(func_obj['x1'])*punt.x + float(func_obj['x2'])*punt.y,2)
         dicpunt={
             'Punto':f'{i}',
-            'Coordenada X (X1)':f'{punt.x}',
-            'Coordenada Y (X2)':f'{punt.y}',
+            'Coordenada X (X1)':f'{round(punt.x,3)}',
+            'Coordenada Y (X2)':f'{round(punt.y,3)}',
             'Valor de la función objetivo (Z)':f'{valor}',
             'Solu': 1 if valor == func_obj_ecua.resultado else 0
             }
