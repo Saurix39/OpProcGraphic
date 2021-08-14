@@ -62,4 +62,8 @@
     border-bottom: 1px solid rgba(204, 204, 204,0.5);
     color: #fff
 }
+.form-control:disabled, .form-control[readonly] {
+    background-color: transparent;
+    opacity: 1;
+}
 
