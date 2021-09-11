@@ -41,7 +41,7 @@ class Ecuacion:
         if dicPropio['tipo'] == 'normal' and dicEcua['tipo'] == 'normal':
             x = dicPropio['x'] + (-1)*(dicEcua['x'])
             result = (dicPropio['resultado']*(-1) ) + dicEcua['resultado']
-            x = result/x
+            x = result/(x if x !=0 else 1)
             y = dicPropio['x']*x + dicPropio['resultado']
         elif dicPropio['tipo']=='puntx' and dicEcua['tipo']=='puntx':
             return None 
@@ -84,8 +84,10 @@ class Ecuacion:
             return Coord(0,y)
     def __str__(self):
         string = ""
-        if self.x != 0 and self.y != 0:
+        if self.x != 0 and self.y != 0 and self.resultado != 'Indefinido':
             string = f"{round(self.x,3)}X + {round(self.y,3)}Y {self.tipo} {round(self.resultado,3)}"
+        elif self.x != 0 and self.y != 0 and self.resultado == 'Indefinido':
+            string = f"{round(self.x,3)}X + {round(self.y,3)}Y {self.tipo} {self.resultado}"
         elif self.x == 0:
             string = f"{round(self.y,3)}Y {self.tipo} {round(self.resultado,3)}"
         elif self.y == 0:
@@ -100,8 +102,10 @@ class Ecuacion:
     def __html__(self):
         element = {"=": "&#61;", "<=": "&le;", ">=": "&ge;"}
         string = ""
-        if self.x != 0 and self.y != 0:
+        if self.x != 0 and self.y != 0 and self.resultado!='Indefinido':
             string = f"{round(self.x,3)}X + {round(self.y,3)}Y {element[self.tipo]} {round(self.resultado,3)}"
+        elif self.x != 0 and self.y != 0 and self.resultado=='Indefinido':
+            string = f"{round(self.x,3)}X + {round(self.y,3)}Y {element[self.tipo]} {self.resultado}"
         elif self.x == 0:
             string = f"{round(self.y,3)}Y {element[self.tipo]} {round(self.resultado,3)}"
         elif self.y == 0:
