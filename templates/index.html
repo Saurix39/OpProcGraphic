@@ -20,21 +20,46 @@
                 <div class="main main-info">
                     <h1 class="main-info-title">Optimización de operaciones</h1>
                     <p class="main-info-p">Este proyecto tiene como objetivo ayudar a las pequeñas y medianas empresas a optimizar sus operaciones solventando los modelos matemáticos introducidos.</p>
+                    <p class="main-info-p">Desarrollado por:</p>
+                    <ul class="main-info-ul">
+                        <li>Mateo Epalza</li>
+                        <li>Santiago Gonzalez</li>
+                        <li>Juan Diego Bermudez</li>
+                    </ul>
+                    <div class="div-help"></div>
                 </div>
                 <div class="main main-form">
                     <h3 class="main-form-title">Ingrese los siguientes datos</h3>
                     <div class="main-form-form">
                         <form action="{{ url_for('data')}}" method="POST">
                             <div class="form-group mb-4">
+                                <label for="metodo" class="main-labels">Seleccione el metodo de solución</label>
+                                <div class="content-select">
+                                    <select class="form-control select" name="tipoMetodo" id="">
+                                        <option value="metodoGrafico" selected="true"> Metodo grafico</option>
+                                        <option value="metodoDF">Metodo dos fases</option>
+                                    </select>
+                                    <i></i>
+                                </div>
+                            </div>
+                            <div class="form-group mb-4">
                                 <label for="variable" class="main-labels">Ingrese el numero de variables</label>
-                                <input type="number" placeholder="Variables" name="numVariables" id="variable" class="form-control" value="2" readonly>
+                                <div class="container-input input-variables">
+                                    <input id="variables" type="number" name="numVariables" id="variable" class="form-control">
+                                    <i></i>
+                                    <i></i>
+                                </div>
                             </div>
                             <div class="form-group mb-4">
                                 <label for="ecuaciones" class="main-labels"> Ingrese la cantidad de restricciones</label>
-                                <input id="ecuaciones" placeholder="Restricciones" name="numRestricciones" class="form-control" type="number">
+                                <div class="container-input input-ecuaciones">
+                                    <input id="ecuaciones" name="numRestricciones" class="form-control" type="number" value="1">
+                                    <i></i>
+                                    <i></i>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <button class="btn btn-primary w-100" id="btnSent" disabled>
+                                <button class="btn btn-primary w-100" id="btnSent">
                                     Enviar
                                 </button>
                             </div>
