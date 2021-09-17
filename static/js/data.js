@@ -65,18 +65,11 @@ function getFuncionObjetivo() {
     // Get the elements
     const inputs = document.querySelectorAll(".objFuncion");
 
-    const f = {
-        "x1": "",
-        "x2": "",
-    }
+    const f = {}
 
-    if (inputs[0].value == null) {
-        inputs[0].classList.add('danger');
-    } else if (inputs[1].value == null) {
-        inputs[1].classList.add('danger');
-    } else {
-        f['x1'] = toDecimal(inputs[0].value);
-        f['x2'] = toDecimal(inputs[1].value);
+    for(i=0; i<inputs.length; i++){
+        if (inputs[i]==null) inputs[0].classList.add('danger')
+        else f[('x' + (i+1).toString())] = toDecimal(inputs[0].value);
     }
 
     return f;
@@ -90,12 +83,19 @@ function getRestricciones() {
     const resFields = document.querySelectorAll(".Restricciones");
 
     resFields.forEach(elem => {
-        restricciones.push({
-            "x1": toDecimal(elem.querySelector(".resx1").value),
-            "x2": toDecimal(elem.querySelector(".resx2").value),
-            "op": elem.querySelector(".resOperand").value,
-            "result": toDecimal(elem.querySelector(".resResult").value)
-        });
+        let variables = elem.querySelectorAll(".restric-var");
+        let data = {}
+
+        for(let i=0; i<variables.length; i++){
+            let key = 'x' + (i+1).toString();
+            let nameVar = '.res' + key;
+            data[key] = toDecimal(elem.querySelector(nameVar).value)
+        }
+
+        data["op"] = elem.querySelector(".resOperand").value;
+        data["result"] = toDecimal(elem.querySelector(".resResult").value);
+
+        restricciones.push(data)
     });
 
     return restricciones;

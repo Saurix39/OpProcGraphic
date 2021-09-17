@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from os import remove, path
 from flask_cors import CORS,cross_origin
 from flask.wrappers import Response
+from flask_cors.core import ACL_REQUEST_HEADERS
 from modelo.ecuacion import Ecuacion
 import numpy as np
 from matplotlib import pyplot as plt
@@ -25,20 +26,38 @@ def index():
 @app.route('/data', methods=['POST', 'GET'])
 def data():
     if request.method == 'POST':
-        numVariables = int(request.form.get("numVariables"))
+        metodo = request.form.get("tipoMetodo")
+        session['metodo'] = metodo
+        session['numVariables'] = int(request.form.get("numVariables"))
         session['numRes'] = int(request.form.get("numRestricciones"))    
-        return render_template("data.html", restricciones = session['numRes'])
+        return render_template(
+            "data.html",
+            restricciones = session['numRes'],
+            variables = session['numVariables']
+        )
     else:
         flash(request.args.get("error"), "alert-danger")
         return render_template("data.html", restricciones = session['numRes'])
-# RUTA DEL GRAFICO
-@app.route('/grafico', methods=['POST', 'GET'])
-def grafico():
 
-    # SE RECIBE LA INFORMACIÓN
-
+@app.route('/metodo', methods=['POST', 'GET'])
+def selecMethod():
     data = json.loads(request.form.get('hidden-data'))
+    res = ""
+    print(data)
+    import pdb; pdb.set_trace()
+    if session['metodo'] == "metodoGrafico":
+        res = grafico(data)
+    else:
+        res = dosFases(data)
     
+    return res
+
+def dosFases(data):
+    print("Ejecutando logica metodo dos fases")
+
+def grafico(data):
+
+    # SE RECIBE LA INFORMACIÓN    
     
     func_obj = data.get('Funcion objetivo')
     func_obj_x1 = float(func_obj['x1'])
@@ -165,7 +184,7 @@ def grafico():
     plt.savefig(nombre)
     plt.close()
 
-    return render_template('metodo.html', data_table = datos_tabla, restricciones= restricciones, fo = func_obj_ecua, nom=nombre, MaxMin= "Maximizar" if min_max == "max" else "Minimizar")
+    return render_template('metodoGrafico.html', data_table = datos_tabla, restricciones= restricciones, fo = func_obj_ecua, nom=nombre, MaxMin= "Maximizar" if min_max == "max" else "Minimizar")
 
 @app.route('/delete', methods=['POST'])
 def deleteImage():

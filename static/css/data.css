@@ -29,12 +29,37 @@
     display: flex;
     flex-flow: row nowrap;
 }
-.in-function > span{
+.grid-container{
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    grid-template-rows: 1fr;
+    align-items: center;
+    grid-auto-flow: row;
+    grid-auto-rows: 100px;
+}
+.grid-container > .grid-select{
+    display: flex;
+}
+.grid-container > .grid-select input{
+    width: 80% !important;
+    margin: 0px 10px;
+}
+.grid-div{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-rows: 1fr;
+    grid-gap: 10px;
+    grid-auto-flow: row;
+}
+.grid-div div{
+    display: flex;
+}
+.grid-div div span{
     min-width: 60px;
     width: 60px;
     text-align: center;
 }
-.in-function > select{
+.grid-div > select{
     margin: 0px 20px 0px 0px;
 }
 .resOperand{
@@ -48,4 +73,14 @@
 .form-control:focus{
     border: 1px solid #00E7B1;
     box-shadow:  0 0 0.25rem rgb(0 232 177 / 50%);
+}
+
+.inputOut{
+    display: inline-block !important;
+    width: 100%;
+}
+
+@media screen and (max-width: 990px){
+    .grid-container{
+        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
 }
