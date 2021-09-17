@@ -76,6 +76,83 @@
     background-color: transparent;
     opacity: 1;
 }
+.developers{
+    color: white;
+    position: relative;
+    top: 170px;
+    font-size: 10px;
+    text-align: center;
+}
+.developers a:hover{
+    cursor: pointer;
+}
+.developers hr{
+    margin: 3px;
+}
+.div-help{
+    height: 150px;
+}
+.modal{
+    max-height: 800px;
+}
+.btn-styles{
+    display: flex;
+    position: absolute;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+
+    width: 60px;
+    height: 60px;
+
+    border-radius: 80px;
+    background-color: rgba(34,46,64,1);
+    cursor: pointer;
+
+    top: 50%;
+    transform: translateY(-60px);
+    z-index: 1;
+}
+.btn-styles > i{ 
+    font-size: 30px;
+    color: white;
+}
+.btn-left{
+    left: 20px;
+}
+.btn-right{
+    right: 20px;
+}
+.slider{
+    width: 400%;
+    height: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    transition: 1s;
+}
+.content{
+    overflow-x: hidden;
+    max-width: 800px;
+    margin: 0px;
+}
+.devInfo{
+    width: calc( 100% / 4);
+    padding-left:80px;
+    padding-right:80px;
+}
+.card{
+    padding: 20px;
+}
+.card img{
+    width: 100%;
+    max-width: 300px;
+    margin-top: 15px;
+    border-radius: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
 
 input[type=number]::-webkit-inner-spin-button, ::-webkit-outer-spin-button{
     -webkit-appearance: none
