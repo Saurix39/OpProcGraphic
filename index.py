@@ -110,13 +110,20 @@ def dosFases(data):
             elif(head == 'Y'):
                 vec_res.append(float(res['result']))
             else:
-                vec_res.append(float)
+                vec_res.append(float(0))
         matriz.append(vec_res)
-    print(column_ini)  
     obj_matriz = Matriz(column_ini,vec_head,matriz)
-
+    fase1(obj_matriz)
     import pdb; pdb.set_trace
+def fase1(obj_mat):
+    obj_mat.sumaR0()
+    
+    obj_mat.column_pivot()
+    obj_mat.filaPivote()
+    obj_mat.inverso()
+    obj_mat.imprimir()
 
+    pass
 # Selecciona el mas positivo del R0 para escoger la columna pivote
 def column_pivot(head,matriz):
     mas_pos = 0

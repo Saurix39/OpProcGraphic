@@ -5,17 +5,24 @@ class Matriz:
         self._header = header
         self._matrix = np.array(matrix)
         self.columna_ini = columna_ini
-        #self._renglonPivote = renglonPivote
-        #self._columnaPivote =  columnaPivote
+        self._renglonPivote = None
+        self._columnaPivote = None
+
+    def sumaR0(self):
+        self._matrix[0]=np.apply_along_axis(sum,0,self._matrix)
 
     def sumar(self, fila, times = 1):
         renglon = self._matrix[self._renglonPivote] * times
         self._matrix[fila] = np.add(self._matrix[fila], renglon)
 
     def inverso(self):
-        celdaPivote = self._matrix[self._renglonPivote][self._columnaPivote]  
-        a = self._matrix[self._renglonPivote] * float(1/celdaPivote)
-        self._matrix[self._renglonPivote, :] = a    
+        matriz = self._matrix
+        print(type(self._renglonPivote))
+        Pivote = matriz[self._renglonPivote]
+
+        print(Pivote)  
+        #a = self._matrix[self._renglonPivote] * float(1/1)
+        #self._matrix[self._renglonPivote, :] = a    
 
     def filaPivote(self):
         columnaPivote = self._matrix[1:, self._columnaPivote]
@@ -27,8 +34,8 @@ class Matriz:
             if (e < res[indice] and e > 0):
                 indice = i
         
-        self.filaPivote = indice + 1
-        print(indice+1)
+        self._filaPivote = indice + 1
+        print(self._filaPivote)
 
     def column_pivot(self):
         mas_pos = 0

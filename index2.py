@@ -10,7 +10,7 @@ def main():
     ma = [a,b,c]
     head = ['R0', 'x1', 'x2', 'x3', 'S1', 'R1', 'R2', 'Y']
 
-    mA = Matriz(head, ma, 0, 1)
+    mA = Matriz(1,head, ma)
     #mA.imprimir()
     #mA.sumar(1, 2)
     mA.column_pivot()
