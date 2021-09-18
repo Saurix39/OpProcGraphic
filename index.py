@@ -1,8 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from os import remove, path
-from flask_cors import CORS,cross_origin
 from flask.wrappers import Response
-from flask_cors.core import ACL_REQUEST_HEADERS
 from modelo.ecuacion import Ecuacion
 import numpy as np
 from matplotlib import pyplot as plt
@@ -14,7 +12,6 @@ import datetime
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 #CORS(app)
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
 numRestricciones = 1
 
 # RUTA INICIAL 
@@ -43,7 +40,10 @@ def data():
 def selecMethod():
     data = json.loads(request.form.get('hidden-data'))
     res = ""
+<<<<<<< HEAD
     print(data)
+=======
+>>>>>>> main
     if session['metodo'] == "metodoGrafico":
         res = grafico(data)
     else:
@@ -52,8 +52,91 @@ def selecMethod():
     return res
 
 def dosFases(data):
+<<<<<<< HEAD
     return render_template("dosFases.html")
+=======
+    # RECIBIMOS LA FUNCION OBJETIVO Y LAS RESTRICCIONES COMO UN JSON
+    func_obj = data.get('Funcion objetivo')
+    restric = data.get('Restricciones')
+    cant_variables = 0
+    matriz = []
+    var_super = 0
+    var_hol = 0
+    var_arti = 0
+    cant_aux = 0
+    # VECTOR DE LOS ENCABEZADOS DE LA MATRIZ
+    vec_head = ['R0']
+    # SE HACE EL CONTEO DE LAS VARIABLES
+    for clave in restric[0]:
+        if(clave != 'result' and clave != 'op' ):
+            cant_variables = cant_variables + 1
+    # SE HACE EL CONTEO DE LAS VARIABLES ADICIONALES POR CADA RESTRICCÓN
+    for res in restric:
+        if(res['op'] == '>='):
+            cant_aux = cant_aux + 2
+            var_super = var_super + 1
+            var_arti = var_arti + 1
+            res['S'+str(var_super)]=-1
+            res['R'+str(var_arti)]=1
+        elif(res['op'] == '<='):
+            cant_aux = cant_aux + 1 
+            var_hol = var_hol + 1 
+            res['S'+str(var_super)]=1
+        elif(res['op'] == '='):
+            cant_aux = cant_aux + 1 
+            var_arti = var_arti + 1
+            res['R'+str(var_arti)]=1
+    for i in range(cant_variables):
+        vec_head.append('x'+str(i+1))
+    for i in range(var_super):
+        vec_head.append('S'+str(i+1))
+    for i in range(var_hol):
+        vec_head.append('S'+str(var_super+i+1))
+    for i in range(0,var_arti):
+        vec_head.append('R'+str(i+1))
+    vec_head.append('Y')
+    vec_r0=[]
+    for head in vec_head:
+        if('R0' == head):
+            vec_r0.append(1)
+        elif('R' in head):
+            vec_r0.append(-1)
+        else:
+            vec_r0.append(0)
+    matriz.append(vec_r0)
+    for res in restric:
+        #Vector de la restriccion
+        vec_res=[]
+        for head in vec_head:
+            if(head in res.keys()):
+                vec_res.append(float(res[head]))
+            elif(head == 'Y'):
+                vec_res.append(float(res['result']))
+            else:
+                vec_res.append(float)
+        matriz.append(vec_res)  
+    print(column_pivot(vec_head,matriz))
+    import pdb; pdb.set_trace
+>>>>>>> main
 
+# Selecciona el mas positivo del R0 para escoger la columna pivote
+def column_pivot(head,matriz):
+    mas_pos = 0
+    ind = 1
+    for indice, cabecera in enumerate(head):
+        if('x' in cabecera):
+            if(matriz[0][indice]>mas_pos):
+                mas_pos=matriz[0][indice]
+                ind=indice
+    return ind
+def continua(head,matriz):
+    cont = False
+    for indice, cabecera in enumerate(head):
+        if('x' in cabecera):
+            if(matriz[0][indice]>0):
+                cont=True
+                break
+    return cont
 def grafico(data):
 
     # SE RECIBE LA INFORMACIÓN    
