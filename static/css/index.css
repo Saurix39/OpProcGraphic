@@ -11,7 +11,7 @@
     overflow: hidden;
 }
 .main{
-    width: 550px;
+    width: 50%;
     height: 750px;
     padding: 45px;
     display: flex;
@@ -156,6 +156,13 @@
 
 input[type=number]::-webkit-inner-spin-button, ::-webkit-outer-spin-button{
     -webkit-appearance: none
+}
+
+input[type=number]
+{
+    -webkit-appearance: textfield !important;
+    margin: 0;
+    -moz-appearance:textfield !important;
 }
 .container-input{
     position: relative;

@@ -41,6 +41,7 @@ def data():
 def selecMethod():
     data = json.loads(request.form.get('hidden-data'))
     res = ""
+
     if session['metodo'] == "metodoGrafico":
         res = grafico(data)
     else:

@@ -61,12 +61,14 @@ const validateMethod = ()=>{
     const i = document.querySelectorAll(".input-variables i");
     if (method == "metodoGrafico"){
         input.value = 2;
+        input.setAttribute("readonly","true")
         for (element of i){
             element.style.display = "none";
         }
     }
     else{
         input.value = 1;
+        input.removeAttribute("readonly")
         for (element of i){
             element.style.display = "block";
         }
