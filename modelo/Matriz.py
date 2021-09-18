@@ -12,7 +12,7 @@ class Matriz:
         self._matrix[0]=np.apply_along_axis(sum,0,self._matrix)
 
     def sumar(self, fila, times = 1):
-        renglon = self._matrix[self._renglonPivote] * times
+        renglon = self._matrix[self._renglonPivote] * ((-1) *times)
         self._matrix[fila] = np.add(self._matrix[fila], renglon)
 
     def inverso(self):
@@ -53,6 +53,16 @@ class Matriz:
                     break
         return cont
 
+    def sumarFilas(self):
+        for idx, fila in enumerate(self._matrix):
+            if(idx != self._renglonPivote):
+                print(self._matrix[idx][self._columnaPivote])
+                self.sumar(idx, self._matrix[idx][self._columnaPivote])
+
+    def setNewColumn(self):
+        self.columna_ini[self._renglonPivote] = self._header[self._columnaPivote] 
+
     def imprimir(self):
         print(self._matrix)
+        print(self.columna_ini)
         
