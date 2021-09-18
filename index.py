@@ -7,6 +7,7 @@ from matplotlib import pyplot as plt
 from matplotlib.patches import Polygon
 from modelo.coord import Coord
 import json
+from modelo.Matriz import Matriz
 import datetime
 
 app = Flask(__name__)
@@ -40,10 +41,6 @@ def data():
 def selecMethod():
     data = json.loads(request.form.get('hidden-data'))
     res = ""
-<<<<<<< HEAD
-    print(data)
-=======
->>>>>>> main
     if session['metodo'] == "metodoGrafico":
         res = grafico(data)
     else:
@@ -52,9 +49,6 @@ def selecMethod():
     return res
 
 def dosFases(data):
-<<<<<<< HEAD
-    return render_template("dosFases.html")
-=======
     # RECIBIMOS LA FUNCION OBJETIVO Y LAS RESTRICCIONES COMO UN JSON
     func_obj = data.get('Funcion objetivo')
     restric = data.get('Restricciones')
@@ -104,7 +98,9 @@ def dosFases(data):
         else:
             vec_r0.append(0)
     matriz.append(vec_r0)
-    for res in restric:
+    column_ini=['R0']
+    for idx, res in enumerate(restric):
+        column_ini.append('R'+str(idx+1))
         #Vector de la restriccion
         vec_res=[]
         for head in vec_head:
@@ -114,10 +110,11 @@ def dosFases(data):
                 vec_res.append(float(res['result']))
             else:
                 vec_res.append(float)
-        matriz.append(vec_res)  
-    print(column_pivot(vec_head,matriz))
+        matriz.append(vec_res)
+    print(column_ini)  
+    obj_matriz = Matriz(column_ini,vec_head,matriz)
+
     import pdb; pdb.set_trace
->>>>>>> main
 
 # Selecciona el mas positivo del R0 para escoger la columna pivote
 def column_pivot(head,matriz):
@@ -129,14 +126,7 @@ def column_pivot(head,matriz):
                 mas_pos=matriz[0][indice]
                 ind=indice
     return ind
-def continua(head,matriz):
-    cont = False
-    for indice, cabecera in enumerate(head):
-        if('x' in cabecera):
-            if(matriz[0][indice]>0):
-                cont=True
-                break
-    return cont
+
 def grafico(data):
 
     # SE RECIBE LA INFORMACIÓN    

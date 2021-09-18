@@ -1,11 +1,12 @@
 import numpy as np
 
 class Matriz:
-    def __init__(self, header, matrix, renglonPivote, columnaPivote):
+    def __init__(self, columna_ini, header, matrix):
         self._header = header
         self._matrix = np.array(matrix)
-        self._renglonPivote = renglonPivote
-        self._columnaPivote =  columnaPivote
+        self.columna_ini = columna_ini
+        #self._renglonPivote = renglonPivote
+        #self._columnaPivote =  columnaPivote
 
     def sumar(self, fila, times = 1):
         renglon = self._matrix[self._renglonPivote] * times
@@ -39,6 +40,15 @@ class Matriz:
                     ind=indice
         self._columnaPivote = ind
         print(ind)
+    
+    def continua(self):
+        cont = False
+        for indice, cabecera in enumerate(self._header):
+            if('x' in cabecera):
+                if(self._matrix[0][indice]>0):
+                    cont=True
+                    break
+        return cont
 
     def imprimir(self):
         print(self._matrix)
