@@ -40,6 +40,10 @@ def data():
 def selecMethod():
     data = json.loads(request.form.get('hidden-data'))
     res = ""
+<<<<<<< HEAD
+    print(data)
+=======
+>>>>>>> main
     if session['metodo'] == "metodoGrafico":
         res = grafico(data)
     else:
@@ -48,6 +52,9 @@ def selecMethod():
     return res
 
 def dosFases(data):
+<<<<<<< HEAD
+    return render_template("dosFases.html")
+=======
     # RECIBIMOS LA FUNCION OBJETIVO Y LAS RESTRICCIONES COMO UN JSON
     func_obj = data.get('Funcion objetivo')
     restric = data.get('Restricciones')
@@ -110,6 +117,7 @@ def dosFases(data):
         matriz.append(vec_res)  
     print(column_pivot(vec_head,matriz))
     import pdb; pdb.set_trace
+>>>>>>> main
 
 # Selecciona el mas positivo del R0 para escoger la columna pivote
 def column_pivot(head,matriz):

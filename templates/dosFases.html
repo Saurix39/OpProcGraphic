@@ -1,0 +1,194 @@
+{% extends 'layout.html'%}
+
+{% block title %}
+Método Dos Fases
+{% endblock %}
+
+{% block header %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modelo.css')}}">
+<script type="text/javascript" src="{{ url_for('static', filename='js/modelo.js')}}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="bg-top">
+    <h1 class="mb-5 page-title">Método Dos Fases</h1>
+</div>
+<div class="container-info">
+    <div class="btn-left btn-styles">
+        <i class="fas fa-arrow-left"></i>
+    </div>
+    <div class="btn-right btn-styles">
+        <i class="fas fa-arrow-right"></i>
+    </div>
+    <div class="slider">
+        <div class="info-page">
+            <h3 class="form-title">Estandarización</h3>
+            <table class="modelo-table">
+                <tbody>
+                    <tr>
+                        <th>Función objetivo ({{ MaxMin }})</th>
+                        <td>{{ fo.__html__() | safe }}</td>
+                        <th>Función objetivo ({{ MaxMin }})</th>
+                        <td>{{ fo.__html__() | safe }}</td>
+                    </tr>
+
+                    {% for res in restricciones %}
+
+                        <tr>
+                            <th>Restriccion No. {{ loop.index }}</th>
+                            <td>{{ res.__html__() | safe }}</td>
+                            <th>Restriccion No. {{ loop.index }}</th>
+                            <td>{{ res.__html__() | safe }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <th>No negatividad</th>
+                        <td> X<sub>1</sub>, X<sub>2</sub> &ge; 0</td>
+                        <th>No negatividad</th>
+                        <td> X<sub>1</sub>, X<sub>2</sub> &ge; 0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="info-page selected">
+            <h3 class="form-title">Solución Óptima</h3>
+            <table class="modelo-table">
+                <thead>
+                    <tr>
+                        <th style="font-size: 45px; text-align: center;">Z</th>
+                        <th style="font-size: 45px; text-align: center;">X1</th>
+                        <th style="font-size: 45px; text-align: center;">X2</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-size: 45px; text-align: center;" >17/5</td>
+                        <td style="font-size: 45px; text-align: center;" >2/5</td>
+                        <td style="font-size: 45px; text-align: center;" >9/5</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="info-page">
+            <!-- La gracias es que la tabla se vaya repitiendo por cada iteracion. Hasta que llegue a la solucion basica inicial factible.-->
+            <h3 class="form-title">Tabla Solucion basica</h3>
+            <table class="modelo-sol">
+                <thead>
+                    <tr>
+                        <th rowspan="2">Iteracion</th>
+                        <th rowspan="2">Ecuacion</th>
+                        <th rowspan="2">Variables Básicas</th>
+                        <th colspan="2">Variables Originales</th>
+                        <th colspan="4">Variables Agregadas</th>
+                        <th rowspan="2">Lado Derecho</th>
+                        <th rowspan="2">Cociente Minimo</th>
+                    </tr>
+                    <tr>
+                        <th>X1</th>
+                        <th>X2</th>
+                        <th>H1</th>
+                        <th>E1</th>
+                        <th>A1</th>
+                        <th>A2</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in data_table['puntos'] %}
+                        {% if data['Solu'] %}
+
+                            <tr class="row-selected">
+                                <td class="values">{{ data['Punto']}}</td>
+                                <td class="values">{{ data['Coordenada X (X1)'] }}</td>
+                                <td class="values">{{ data['Coordenada Y (X2)'] }}</td>
+                                <td class="values">{{ data['Valor de la función objetivo (Z)'] }}</td>
+                            </tr>
+
+                        {% else %}
+
+                            <tr>
+                                <td class="values">{{ data['Punto']}}</td>
+                                <td class="values">{{ data['Coordenada X (X1)'] }}</td>
+                                <td class="values">{{ data['Coordenada Y (X2)'] }}</td>
+                                <td class="values">{{ data['Valor de la función objetivo (Z)'] }}</td>
+                            </tr>
+                        
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="form-check form-switch mt-3">
+                <input class="form-check-input" type="checkbox" id="checkbox" onclick="convert()">
+                <label class="form-check-label" for="flexSwitchCheckDefault">Ver los valores en fracciones</label>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function convert(){
+        if(document.getElementById('checkbox').checked){
+            $(".values").each(function(){
+                if ( $(this).text() % 1 != 0) {
+                    var result = toFraction($(this).text());
+                    $(this).text(result[0]+'/'+result[1]);
+                }
+            });
+        }else{
+            $(".values").each(function(){
+                if ( $(this).text() % 1 != 0) {
+                    $(this).text(toDecimal($(this).text()));
+                }
+            });
+        }
+    }
+
+    var toFraction = function (dec) {
+        var is_neg = dec < 0;
+        dec = Math.abs(dec);
+        var done = false;
+        //you can adjust the epsilon to a larger number if you don't need very high precision
+        var n1 = 0, d1 = 1, n2 = 1, d2 = 0, n = 0, q = dec, epsilon = 1e-13;
+        while (!done) {
+            n++;
+            if (n > 10000) {
+                done = true;
+            }
+            var a = parseInt(q);
+            var num = n1 + a * n2;
+            var den = d1 + a * d2;
+            var e = (q - a);
+            if (e < epsilon) {
+                done = true;
+            }
+            q = 1 / e;
+            n1 = n2;
+            d1 = d2;
+            n2 = num;
+            d2 = den;
+            if (Math.abs(num / den - dec) < epsilon || n > 30) {
+                done = true;
+            }
+        }
+        return [is_neg ? -num : num, den];
+    };
+
+    function toDecimal(frac){
+        let total = frac;
+        if (frac.search("/") != -1){
+            const numbers = frac.split("/");
+            total = parseFloat(numbers[0]) / parseFloat(numbers[1]);
+        }
+        return total
+    }
+    
+    window.addEventListener("beforeunload", async function(event){
+        var direccion = '{{nom}}';
+        var partes = direccion.split('/');
+        var url = "http://127.0.0.1:5000/delete";
+        let image={image:partes[partes.length-1]}
+        await fetch(url,{
+            method:'POST',
+            body:JSON.stringify(image)
+        });
+    });
+</script>
+{% endblock %}
