@@ -16,13 +16,9 @@ class Matriz:
         self._matrix[fila] = np.add(self._matrix[fila], renglon)
 
     def inverso(self):
-        matriz = self._matrix
-        print(type(self._renglonPivote))
-        Pivote = matriz[self._renglonPivote]
-
-        print(Pivote)  
-        #a = self._matrix[self._renglonPivote] * float(1/1)
-        #self._matrix[self._renglonPivote, :] = a    
+        celdaPivote = self._matrix[self._renglonPivote][self._columnaPivote]  
+        a = self._matrix[self._renglonPivote] * float(1/celdaPivote)
+        self._matrix[self._renglonPivote, :] = a    
 
     def filaPivote(self):
         columnaPivote = self._matrix[1:, self._columnaPivote]
@@ -34,8 +30,8 @@ class Matriz:
             if (e < res[indice] and e > 0):
                 indice = i
         
-        self._filaPivote = indice + 1
-        print(self._filaPivote)
+        self._renglonPivote = indice + 1
+        print(self._renglonPivote)
 
     def column_pivot(self):
         mas_pos = 0

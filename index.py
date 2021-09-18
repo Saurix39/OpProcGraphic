@@ -117,11 +117,12 @@ def dosFases(data):
     import pdb; pdb.set_trace
 def fase1(obj_mat):
     obj_mat.sumaR0()
-    
-    obj_mat.column_pivot()
-    obj_mat.filaPivote()
-    obj_mat.inverso()
-    obj_mat.imprimir()
+    while(obj_mat.continua()):
+        obj_mat.column_pivot()
+        obj_mat.filaPivote()
+        obj_mat.inverso()
+        obj_mat.imprimir()
+        break
 
     pass
 # Selecciona el mas positivo del R0 para escoger la columna pivote
