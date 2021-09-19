@@ -114,6 +114,7 @@ def dosFases(data):
         matriz.append(vec_res)
     obj_matriz = Matriz(column_ini,vec_head,matriz)
     matriz_fase1, obj_matriz = fase1(obj_matriz)
+    fase2(obj_matriz)
     import pdb; pdb.set_trace
 # Funcion para la fase 1
 def fase1(obj_mat):
@@ -125,13 +126,14 @@ def fase1(obj_mat):
         obj_mat.setNewColumn()
         obj_mat.inverso()
         obj_mat.sumarFilas()
-        obj_mat.imprimir()
         matr_fa1.append(obj_mat)
     return matr_fa1, obj_mat
 
 # Funcion para la fase 2
 def fase2(obj_mat):
-    pass
+    obj_mat.eliminarCol()
+    obj_mat.eliminarFil()
+    obj_mat.imprimir()
 
 # Selecciona el mas positivo del R0 para escoger la columna pivote
 def column_pivot(head,matriz):
