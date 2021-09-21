@@ -51,6 +51,7 @@ def selecMethod():
 
 def dosFases(data):
     # RECIBIMOS LA FUNCION OBJETIVO Y LAS RESTRICCIONES COMO UN JSON
+    # TODO Refactorizar la informacion enviada por la plantilla en la funcion objetivo
     func_obj = data.get('Funcion objetivo')
     restric = data.get('Restricciones')
     cant_variables = 0
@@ -114,7 +115,7 @@ def dosFases(data):
         matriz.append(vec_res)
     obj_matriz = Matriz(column_ini,vec_head,matriz)
     matriz_fase1, obj_matriz = fase1(obj_matriz)
-    fase2(obj_matriz)
+    fase2(obj_matriz,func_obj)
     import pdb; pdb.set_trace
 # Funcion para la fase 1
 def fase1(obj_mat):
@@ -130,15 +131,16 @@ def fase1(obj_mat):
     return matr_fa1, obj_mat
 
 # Funcion para la fase 2
-def fase2(obj_mat):
-    
-    print("------------------------------")
-    print(obj_mat._matrix)
-    print("------------------------------")
+def fase2(obj_mat, func_obj):
     obj_mat.eliminarCol()
     obj_mat.eliminarFil()
     obj_mat.ordenar()
-    obj_mat.imprimir()
+    obj_mat.agreCabe()
+    obj_mat.agregColumnZ()
+    obj_mat.agregarZ(enconZ(func_obj))
+
+def enconZ(func_obj):
+    return [1]+list((float(i)*(-1.0) for i in func_obj.values()))
 
 # Selecciona el mas positivo del R0 para escoger la columna pivote
 def column_pivot(head,matriz):

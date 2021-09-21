@@ -69,7 +69,7 @@ function getFuncionObjetivo() {
 
     for(i=0; i<inputs.length; i++){
         if (inputs[i]==null) inputs[0].classList.add('danger')
-        else f[('x' + (i+1).toString())] = toDecimal(inputs[0].value);
+        else f[('x' + (i+1).toString())] = toDecimal(inputs[i].value);
     }
 
     return f;

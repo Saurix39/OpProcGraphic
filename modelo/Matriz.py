@@ -80,26 +80,26 @@ class Matriz:
     def ordenar(self):        
         colum_ini_aux = self.columna_ini.copy()
         self.columna_ini = sorted(self.columna_ini)
-        #  colum_ini_aux =   [x2, x1] viejo
-        #  self.columna_ini = [x1, x2]  nuevo
-        #  idx = 0
-        #  new_idx = 1
-        #  val = x2
-        aux = None
-        for idx, val in enumerate(colum_ini_aux):
-            aux = self._matrix[idx].copy()
-            for idx2, val2 in enumerate(self.columna_ini):
-                #aux=self._matrix[idx2].copy()
-                if(val==val2):
-                    self._matrix[idx2]=self._matrix[idx].copy()
-            self._matrix[idx]=aux.copy()
+        mat_aux = self._matrix.copy()
+        for idx, val in enumerate(colum_ini_aux):                 
+            new_idx = self.columna_ini.index(val)
+            mat_aux[new_idx] = self._matrix[idx].copy()
+        self._matrix= mat_aux.copy()
 
-                                        
-            #new_idx = self.columna_ini.index(val)
-            #aux = self._matrix[new_idx].copy()
-            #self._matrix[new_idx] = self._matrix[idx].copy()
-            #self._matrix[idx] = aux
-            #import pdb; pdb.set_trace()
+    def agreCabe(self):
+        self._header=['Z']+self._header
+    
+    def agregarZ(self, zfile):
+        iter = len(self._header) - len(zfile)
+        for i in range(0,iter):
+            zfile.append(float(0))
+        zfile=np.array(zfile)
+        self._matrix = np.insert(self._matrix, [0] ,zfile,axis = 0)
+        self.columna_ini = ['Z'] + self.columna_ini
+    
+    def agregColumnZ(self):
+        zeros_vec = np.zeros(1)
+        self._matrix = np.insert(self._matrix, [0] ,zeros_vec,axis = 1)
 
     def imprimir(self):
         print(self._matrix)
