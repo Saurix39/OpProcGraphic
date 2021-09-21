@@ -31,7 +31,6 @@ class Matriz:
                 indice = i
         
         self._renglonPivote = indice + 1
-        print(self._renglonPivote)
 
     def column_pivot(self):
         mas_pos = 0
@@ -42,7 +41,6 @@ class Matriz:
                     mas_pos=self._matrix[0][indice]
                     ind=indice
         self._columnaPivote = ind
-        print(ind)
     
     def continua(self):
         cont = False
@@ -56,7 +54,6 @@ class Matriz:
     def sumarFilas(self):
         for idx, fila in enumerate(self._matrix):
             if(idx != self._renglonPivote):
-                print(self._matrix[idx][self._columnaPivote])
                 self.sumar(idx, self._matrix[idx][self._columnaPivote])
 
     def setNewColumn(self):
@@ -79,6 +76,30 @@ class Matriz:
         for idx, value in enumerate(vec_idx):
             self._header.pop(value-idx)
             self._matrix = np.delete(self._matrix,(value-idx),axis=1)
+
+    def ordenar(self):        
+        colum_ini_aux = self.columna_ini.copy()
+        self.columna_ini = sorted(self.columna_ini)
+        #  colum_ini_aux =   [x2, x1] viejo
+        #  self.columna_ini = [x1, x2]  nuevo
+        #  idx = 0
+        #  new_idx = 1
+        #  val = x2
+        aux = None
+        for idx, val in enumerate(colum_ini_aux):
+            aux = self._matrix[idx].copy()
+            for idx2, val2 in enumerate(self.columna_ini):
+                #aux=self._matrix[idx2].copy()
+                if(val==val2):
+                    self._matrix[idx2]=self._matrix[idx].copy()
+            self._matrix[idx]=aux.copy()
+
+                                        
+            #new_idx = self.columna_ini.index(val)
+            #aux = self._matrix[new_idx].copy()
+            #self._matrix[new_idx] = self._matrix[idx].copy()
+            #self._matrix[idx] = aux
+            #import pdb; pdb.set_trace()
 
     def imprimir(self):
         print(self._matrix)

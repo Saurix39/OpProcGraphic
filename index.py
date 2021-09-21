@@ -131,8 +131,13 @@ def fase1(obj_mat):
 
 # Funcion para la fase 2
 def fase2(obj_mat):
+    
+    print("------------------------------")
+    print(obj_mat._matrix)
+    print("------------------------------")
     obj_mat.eliminarCol()
     obj_mat.eliminarFil()
+    obj_mat.ordenar()
     obj_mat.imprimir()
 
 # Selecciona el mas positivo del R0 para escoger la columna pivote
