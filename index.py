@@ -51,15 +51,14 @@ def selecMethod():
 
 def dosFases(data):
     # RECIBIMOS LA FUNCION OBJETIVO Y LAS RESTRICCIONES COMO UN JSON
-    # TODO Refactorizar la informacion enviada por la plantilla en la funcion objetivo
     func_obj = data.get('Funcion objetivo')
     restric = data.get('Restricciones')
+    Minmax = data.get('Minmax')
     cant_variables = 0
     matriz = []
     var_super = 0
     var_hol = 0
     var_arti = 0
-    cant_aux = 0
     # VECTOR DE LOS ENCABEZADOS DE LA MATRIZ
     vec_head = ['R0']
     # SE HACE EL CONTEO DE LAS VARIABLES
@@ -69,28 +68,27 @@ def dosFases(data):
     # SE HACE EL CONTEO DE LAS VARIABLES ADICIONALES POR CADA RESTRICCÓN
     for res in restric:
         if(res['op'] == '>='):
-            cant_aux = cant_aux + 2
             var_super = var_super + 1
             var_arti = var_arti + 1
             res['S'+str(var_super)]=-1
             res['R'+str(var_arti)]=1
         elif(res['op'] == '<='):
-            cant_aux = cant_aux + 1 
             var_hol = var_hol + 1 
-            res['S'+str(var_super)]=1
+            res['H'+str(var_hol)]= 1
         elif(res['op'] == '='):
-            cant_aux = cant_aux + 1 
             var_arti = var_arti + 1
             res['R'+str(var_arti)]=1
+    # SE AGREGAN X, S, R & Y AL VECTOR HEADER DEPENDIENDO DE LOS CONTEOS DE VARIABLES ANTERIORES
     for i in range(cant_variables):
         vec_head.append('x'+str(i+1))
+    for i in range(var_hol):
+        vec_head.append('H'+str(i+1))
     for i in range(var_super):
         vec_head.append('S'+str(i+1))
-    for i in range(var_hol):
-        vec_head.append('S'+str(var_super+i+1))
     for i in range(0,var_arti):
         vec_head.append('R'+str(i+1))
     vec_head.append('Y')
+    # SE ARMA LA FILA PARA R0 Y LLENANDO LOS ESPACIOS NO DECLARADOS CON 0 
     vec_r0=[]
     for head in vec_head:
         if('R0' == head):
@@ -100,24 +98,34 @@ def dosFases(data):
         else:
             vec_r0.append(0)
     matriz.append(vec_r0)
+    # SE ARMA LA COLUMNA INICIAL QUE CONTIENE LOS NOMBRES DE CADA FILA
+    # SE ARMA CADA UNA DE LAS FILAS
     column_ini=['R0']
     for idx, res in enumerate(restric):
-        column_ini.append('R'+str(idx+1))
+        #column_ini.append('R'+str(idx+1))
         #Vector de la restriccion
         vec_res=[]
         for head in vec_head:
             if(head in res.keys()):
                 vec_res.append(float(res[head]))
+                if('R' in head):
+                    column_ini.append(head)
+                elif('H' in head):
+                    column_ini.append(head)
             elif(head == 'Y'):
                 vec_res.append(float(res['result']))
             else:
                 vec_res.append(float(0))
         matriz.append(vec_res)
+    # SE INSTANCIA EL OBJETO DE TIPO MATRIZ QUE CONTIENE LA MATRIZ A UTILIZAR
     obj_matriz = Matriz(column_ini,vec_head,matriz)
-    matriz_fase1, obj_matriz = fase1(obj_matriz)
-    fase2(obj_matriz,func_obj)
-    import pdb; pdb.set_trace
-# Funcion para la fase 1
+    # SE LLAMA A LA FUNCION FASE1 QUE NOS DEVUELVE UNA LISTA DE MATRICES Y LA MATRIZ FINAL 
+    if(var_arti > 1):
+        matriz_fase1, obj_matriz = fase1(obj_matriz)
+    # SE LLAMA A LA FUNCION FASE2
+    fase2(obj_matriz, func_obj, Minmax)
+
+# FUNCION PARA LA FASE 1
 def fase1(obj_mat):
     matr_fa1=[]
     obj_mat.sumaR0()
@@ -130,28 +138,36 @@ def fase1(obj_mat):
         matr_fa1.append(obj_mat)
     return matr_fa1, obj_mat
 
-# Funcion para la fase 2
-def fase2(obj_mat, func_obj):
+# FUNCION PARA LA FASE 2
+def fase2(obj_mat, func_obj, Minmax):
+    obj_mat.imprimir()
     obj_mat.eliminarCol()
     obj_mat.eliminarFil()
-    obj_mat.ordenar()
+    #obj_mat.ordenar()
     obj_mat.agreCabe()
     obj_mat.agregColumnZ()
     obj_mat.agregarZ(enconZ(func_obj))
+    obj_mat.restarEnZ()
+    if(Minmax=="max"):
+        while(obj_mat.continuaFaseDosMax()):
+            obj_mat.columnaPivoteFaseDosMax()
+            obj_mat.filaPivote(True)
+            obj_mat.setNewColumn()
+            obj_mat.inverso()
+            obj_mat.sumarFilas()
+    elif(Minmax=="min"):
+        while(obj_mat.continuaFaseDosMin()):
+            obj_mat.columnaPivoteFaseDosMin()
+            obj_mat.filaPivote(True)
+            obj_mat.setNewColumn()
+            obj_mat.inverso()
+            obj_mat.sumarFilas()
+    obj_mat.imprimir()
 
+# DEVUELVE LA FILA PARA Z LA CUAL ES LA FUNCION OBJETIVO DESPEJADA
+# Z-X1-X2-X3 = 0
 def enconZ(func_obj):
     return [1]+list((float(i)*(-1.0) for i in func_obj.values()))
-
-# Selecciona el mas positivo del R0 para escoger la columna pivote
-def column_pivot(head,matriz):
-    mas_pos = 0
-    ind = 1
-    for indice, cabecera in enumerate(head):
-        if('x' in cabecera):
-            if(matriz[0][indice]>mas_pos):
-                mas_pos=matriz[0][indice]
-                ind=indice
-    return ind
 
 def grafico(data):
 
