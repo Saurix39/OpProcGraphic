@@ -119,7 +119,7 @@ def dosFases(data):
         matriz.append(vec_res)
     # SE INSTANCIA EL OBJETO DE TIPO MATRIZ QUE CONTIENE LA MATRIZ A UTILIZAR
     fila_cj = [0,0,0,0,-1,-1]
-    obj_matriz = Matriz(vec_head, column_ini , fila_cj, matriz, Minmax)
+    obj_matriz = Matriz(vec_head, column_ini , matriz, Minmax)
     obj_matriz.fase1()
     # SE LLAMA A LA FUNCION FASE1 QUE NOS DEVUELVE UNA LISTA DE MATRICES Y LA MATRIZ FINAL 
     #if(var_arti > 1):

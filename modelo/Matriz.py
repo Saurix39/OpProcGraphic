@@ -1,13 +1,14 @@
 import numpy as np
 
 class Matriz:
-    def __init__(self, header, columna_xb, fila_cj, matrix, metodo):
+    def __init__(self, header, columna_xb, matrix, metodo):
         self._header = header
         self._matrix = np.array(matrix)
         self.columna_xb = columna_xb
         self.columna_zj = []
-        self.fila_cj = fila_cj
+        self.fila_cj = []
         self._metodo = metodo
+        self._setFilaCj()
         self._renglonPivote = None
         self._columnaPivote = None
         self._Z = None
@@ -19,9 +20,7 @@ class Matriz:
     def fase1(self):
         while(self._Z != 0.0 and self._continuaFase1()):
             self._columnaPivoteFunc()
-            print(self._columnaPivote)
             self._filaPivoteFunc()
-            print(self._renglonPivote)
             self._setNewXb()
             self._setNewZj()
             self._inverso()
@@ -31,13 +30,30 @@ class Matriz:
             self.imprimir()
             import pdb; pdb.set_trace()
 
+    def fase2(self):
+        # TODO hijueputas
+
     def _continuaFase1(self):
         band = False
         for valor in self._ZjCj:
-            if valor > 0:
-                band = True
-                break
+            if self._metodo == "min":
+                if valor > 0:
+                    band = True
+                    break
+            else:
+                if valor < 0:
+                    band = True
+                    break
+
         return band
+
+    def _setFilaCj(self, fase= False):
+        if not fase:
+            for val in self._header:
+                if 'R' in val:
+                    self.fila_cj.append(1.0 if self._metodo == "min" else -1.0)
+                elif val != 'Y':
+                    self.fila_cj.append(0.0)
 
     def _generateZjCj(self):
         self._ZjCj = []
