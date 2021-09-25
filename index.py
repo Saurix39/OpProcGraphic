@@ -60,7 +60,7 @@ def dosFases(data):
     var_hol = 0
     var_arti = 0
     # VECTOR DE LOS ENCABEZADOS DE LA MATRIZ
-    vec_head = ['R0']
+    vec_head = []
     # SE HACE EL CONTEO DE LAS VARIABLES
     for clave in restric[0]:
         if(clave != 'result' and clave != 'op' ):
@@ -89,18 +89,18 @@ def dosFases(data):
         vec_head.append('R'+str(i+1))
     vec_head.append('Y')
     # SE ARMA LA FILA PARA R0 Y LLENANDO LOS ESPACIOS NO DECLARADOS CON 0 
-    vec_r0=[]
-    for head in vec_head:
-        if('R0' == head):
-            vec_r0.append(1)
-        elif('R' in head):
-            vec_r0.append(-1)
-        else:
-            vec_r0.append(0)
-    matriz.append(vec_r0)
+    #vec_r0=[]
+    #for head in vec_head:
+    #    if('R0' == head):
+    #        vec_r0.append(1)
+    #    elif('R' in head):
+    #        vec_r0.append(-1)
+    #    else:
+    #        vec_r0.append(0)
+    #matriz.append(vec_r0)
     # SE ARMA LA COLUMNA INICIAL QUE CONTIENE LOS NOMBRES DE CADA FILA
     # SE ARMA CADA UNA DE LAS FILAS
-    column_ini=['R0']
+    column_ini=[]
     for idx, res in enumerate(restric):
         #column_ini.append('R'+str(idx+1))
         #Vector de la restriccion
@@ -118,25 +118,28 @@ def dosFases(data):
                 vec_res.append(float(0))
         matriz.append(vec_res)
     # SE INSTANCIA EL OBJETO DE TIPO MATRIZ QUE CONTIENE LA MATRIZ A UTILIZAR
-    obj_matriz = Matriz(column_ini,vec_head,matriz)
+    fila_cj = [0,0,0,0,1,1]
+    obj_matriz = Matriz(vec_head, column_ini , fila_cj, matriz, Minmax)
+    obj_matriz.fase1()
     # SE LLAMA A LA FUNCION FASE1 QUE NOS DEVUELVE UNA LISTA DE MATRICES Y LA MATRIZ FINAL 
-    if(var_arti > 1):
-        matriz_fase1, obj_matriz = fase1(obj_matriz)
+    #if(var_arti > 1):
+    #    matriz_fase1, obj_matriz = fase1(obj_matriz)
     # SE LLAMA A LA FUNCION FASE2
-    fase2(obj_matriz, func_obj, Minmax)
+    #fase2(obj_matriz, func_obj, Minmax)
 
 # FUNCION PARA LA FASE 1
 def fase1(obj_mat):
     matr_fa1=[]
-    obj_mat.sumaR0()
-    while(obj_mat.continua()):
-        obj_mat.column_pivot()
-        obj_mat.filaPivote()
-        obj_mat.setNewColumn()
-        obj_mat.inverso()
-        obj_mat.sumarFilas()
-        matr_fa1.append(obj_mat)
-    return matr_fa1, obj_mat
+    #obj_mat.sumaR0()
+    #while(obj_mat.continua()):
+    obj_mat.column_pivot()
+    obj_mat.imprimir()
+    #obj_mat.filaPivote()
+    #obj_mat.setNewColumn()
+    #obj_mat.inverso()
+    #obj_mat.sumarFilas()
+    #matr_fa1.append(obj_mat)
+    #return matr_fa1, obj_mat
 
 # FUNCION PARA LA FASE 2
 def fase2(obj_mat, func_obj, Minmax):
