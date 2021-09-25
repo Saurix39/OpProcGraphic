@@ -10,23 +10,34 @@ class Matriz:
         self._metodo = metodo
         self._renglonPivote = None
         self._columnaPivote = None
-        self._z = None
+        self._Z = None
         self._setNewZj()
         self._setZ()
+        self._generateZjCj()
 
 
     def fase1(self):
-        while(self._z != 0.0):
-            self._generateZjCj()
+        while(self._Z != 0.0 and self._continuaFase1()):
             self._columnaPivoteFunc()
+            print(self._columnaPivote)
             self._filaPivoteFunc()
+            print(self._renglonPivote)
             self._setNewXb()
             self._setNewZj()
             self._inverso()
             self._sumarFilas()
             self._setZ()
+            self._generateZjCj()
             self.imprimir()
             import pdb; pdb.set_trace()
+
+    def _continuaFase1(self):
+        band = False
+        for valor in self._ZjCj:
+            if valor > 0:
+                band = True
+                break
+        return band
 
     def _generateZjCj(self):
         self._ZjCj = []
@@ -34,6 +45,7 @@ class Matriz:
             dot = np.array(self.columna_zj) * self._matrix[0:,i]
             res = np.sum(dot, axis=0)
             self._ZjCj.append(res - self.fila_cj[i])
+
     def _setZ(self):
         self._Z = -1
         dot = np.array(self.columna_zj) * self._matrix[0:,-1]
