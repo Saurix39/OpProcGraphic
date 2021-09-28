@@ -1,8 +1,10 @@
 import numpy as np
+import copy
 
 class Matriz:
-    def __init__(self, header, columna_xb, matrix, metodo):
+    def __init__(self, header, columna_xb, matrix, metodo, FO):
         self._header = header
+        self._FO = FO
         self._matrix = np.array(matrix)
         self.columna_xb = columna_xb
         self.columna_zj = []
@@ -18,22 +20,44 @@ class Matriz:
 
 
     def fase1(self):
-        while(self._Z != 0.0 and self._continuaFase1()):
+        matrices_fase1 = []
+        while(self._Z != 0.0 and self._continua()):
             self._columnaPivoteFunc()
             self._filaPivoteFunc()
+            matrices_fase1.append(copy.deepcopy(self))
             self._setNewXb()
             self._setNewZj()
             self._inverso()
             self._sumarFilas()
             self._setZ()
             self._generateZjCj()
-            self.imprimir()
-            import pdb; pdb.set_trace()
+            #self.imprimir()
+        matrices_fase1.append(copy.deepcopy(self))
+        return matrices_fase1
 
     def fase2(self):
-        # TODO hijueputas
+        matrices_fase2=[]
+        self._eliminarColumnasR()
+        self._eliminarFilasR()
+        self._setFilaCj(True)
+        self._setNewZj()
+        self._generateZjCj()
+        self._setZ()
+        self.imprimir()
+        while(self._continua()):
+            self._columnaPivoteFunc()
+            self._filaPivoteFunc()
+            matrices_fase2.append(copy.deepcopy(self))
+            self._setNewXb()
+            self._setNewZj()
+            self._inverso()
+            self._sumarFilas()
+            self._setZ()
+            self._generateZjCj()
+        matrices_fase2.append(copy.deepcopy(self))
+        return matrices_fase2
 
-    def _continuaFase1(self):
+    def _continua(self):
         band = False
         for valor in self._ZjCj:
             if self._metodo == "min":
@@ -44,7 +68,6 @@ class Matriz:
                 if valor < 0:
                     band = True
                     break
-
         return band
 
     def _setFilaCj(self, fase= False):
@@ -54,6 +77,11 @@ class Matriz:
                     self.fila_cj.append(1.0 if self._metodo == "min" else -1.0)
                 elif val != 'Y':
                     self.fila_cj.append(0.0)
+        else:
+            self.fila_cj=[]
+            for val in self._header:
+                if val !='Y':
+                    self.fila_cj.append(float(self._FO[val]) if val in self._FO.keys() else 0.0)
 
     def _generateZjCj(self):
         self._ZjCj = []
@@ -164,7 +192,7 @@ class Matriz:
     def _setNewZj(self):
         self.columna_zj = [self.fila_cj[self._header.index(value)] for idx, value in enumerate(self.columna_xb) if value in self._header]
 
-    def eliminarFil(self):
+    def _eliminarFilasR(self):
         vec_idx=[]
         for idx, valor in enumerate(self.columna_xb):
             if("R" in valor):               
@@ -173,7 +201,7 @@ class Matriz:
             self.columna_xb.pop(value-idx)
             self._matrix = np.delete(self._matrix,(value-idx),axis=0)
 
-    def eliminarCol(self):
+    def _eliminarColumnasR(self):
         vec_idx = []
         for idx, valor in enumerate(self._header): 
             if("R" in valor):
@@ -227,5 +255,6 @@ class Matriz:
         print(self._matrix)
         print(self.columna_xb)
         print(self.columna_zj)
+        print(self._ZjCj)
         print(self._Z)
         
