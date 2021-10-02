@@ -88,9 +88,6 @@
 .modelo-table{
     margin: 60px 30px;
 }
-.modelo-table:first-child{
-    margin-right: 0px;
-}
 table{
     border-collapse: collapse;
 }
@@ -145,7 +142,6 @@ table tr:hover{
     color: #000;
     border-radius: 5px;
     background-color: #fff;
-    box-shadow: 5px 5px 20px #c9c9c9;
 
     display: flex;
     flex-flow: row nowrap;
@@ -153,12 +149,10 @@ table tr:hover{
     align-items: center;
     
     transform: translateX(0%);
-
     transition: all 0.5s ease;
-    transform: translateX(-50%);
 }
-.carrousel .img{
-    width: calc( 100% / 2 - 2em);
+.carrousel table{
+    width: calc( 100% / 2 - 4em);
     min-height: 10vh;
     color: #000;
     border-radius: 5px;
@@ -176,18 +170,20 @@ table tr:hover{
     align-items: center;
 }
 .carrousel .punto{
-    width: 10px;
-    height: 10px;
+    width: 17px;
+    height: 17px;
     margin: 6px;
-    border-radius: 5px;
+    border-radius: 50%;
     background-color: #ccc;
     box-shadow: 10px 10px 20px #c9c9c9;
     
     cursor: pointer;
 }
-.carrousel .punto.activo {
-    background-color: lightblue;
-  }
+
+.carrousel > .puntos > .activo {
+    background-color: #103868;
+}
+
 .punto::marker{
     content: none;
 }

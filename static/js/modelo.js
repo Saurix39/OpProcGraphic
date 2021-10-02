@@ -25,10 +25,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     puntos.forEach( (punto, position)=>{
         puntos[position].addEventListener("click", ()=>{
-    
             calcWidth = position * -50 // 50 equivale al porcentaje que moveremos de translate X 
-            console.log(calcWidth)
             carrousel__container.style.transform = `translateX(${ calcWidth }%)`;
+
+            puntos.forEach( (punto, position) => {
+                puntos[position].classList.remove('activo');
+            })
+
+            puntos[position].classList.add('activo');
         })
     })
 });
