@@ -89,7 +89,6 @@
     margin: 60px 30px;
 }
 .modelo-table:first-child{
-    flex-grow: 3;
     margin-right: 0px;
 }
 table{
@@ -140,7 +139,7 @@ table tr:hover{
     box-shadow: 5px 5px 20px #c9c9c9;
     overflow: hidden;
 }
-.carrousel .grande{
+.carrousel .carrousel__container{
     width: 200%;
     padding: 10px;
     color: #000;

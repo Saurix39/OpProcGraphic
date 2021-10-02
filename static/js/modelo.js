@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const grande = document.querySelector(".grande");
+    const carrousel__container = document.querySelector(".carrousel__container");
     const puntos = document.querySelectorAll(".punto");
 
     puntos.forEach( (punto, position)=>{
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
             calcWidth = position * -50 // 50 equivale al porcentaje que moveremos de translate X 
             console.log(calcWidth)
-            grande.style.transform = `translateX(${ calcWidth }%)`;
+            carrousel__container.style.transform = `translateX(${ calcWidth }%)`;
         })
     })
 });
