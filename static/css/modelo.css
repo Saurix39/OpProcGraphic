@@ -95,10 +95,17 @@ table{
 table td, table th{
     height: 50px;
     padding: 0px 15px ;
+    text-align: center;
 }
 
 table tr{
     border: 1px solid #DDD;
+}
+
+#tr-editable th:last-child{
+    text-align: center;
+    background: #103366;
+    color: #fff;
 }
 
 table tr:nth-child(even){

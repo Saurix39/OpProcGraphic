@@ -19,11 +19,17 @@ class Matriz:
         self._generateZjCj()
 
     def getHeader(self):
-            return self._header
+        return self._header
     def getFilaCj(self):
-            return self.fila_cj
+        return self.fila_cj
     def getColumnaXb(self):
-            return self.columna_xb
+        print("holaaaa")
+        print(self.columna_xb)
+        return self.columna_xb
+    def getMatriz(self):
+        return self._matrix
+    def getColumnaZj(self):
+        return self.columna_zj
 
     def fase1(self):
         matrices_fase1 = []
