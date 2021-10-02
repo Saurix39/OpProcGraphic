@@ -18,6 +18,10 @@ class Matriz:
         self._setZ()
         self._generateZjCj()
 
+    def getZ(self):
+        return self._Z
+    def getZjCj(self):
+        return self._ZjCj
     def getHeader(self):
         return self._header
     def getFilaCj(self):
@@ -47,6 +51,16 @@ class Matriz:
         matrices_fase1.append(copy.deepcopy(self))
         return matrices_fase1
 
+    def datosDeFilaMatriz(self,i):
+        fila=[self.columna_zj[i]]
+        for idx,valor in enumerate(self._matrix[i]):
+            if(idx == (self._matrix[i].size-1)):
+                fila.append(self.columna_xb[i])
+                fila.append(valor)
+            else:
+                fila.append(valor)
+        print(fila)
+        return fila
     def fase2(self):
         matrices_fase2=[]
         self._eliminarColumnasR()
