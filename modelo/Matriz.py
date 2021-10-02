@@ -18,6 +18,12 @@ class Matriz:
         self._setZ()
         self._generateZjCj()
 
+    def getHeader(self):
+            return self._header
+    def getFilaCj(self):
+            return self.fila_cj
+    def getColumnaXb(self):
+            return self.columna_xb
 
     def fase1(self):
         matrices_fase1 = []
