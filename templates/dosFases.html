@@ -21,109 +21,90 @@ Método Dos Fases
         <i class="fas fa-arrow-right"></i>
     </div>
     <div class="slider">
-        <div class="info-page">
+        <div class="info-page flex">
             <h3 class="form-title">Estandarización</h3>
-            <table class="modelo-table">
-                <tbody>
-                    <tr>
-                        <th>Función objetivo ({{ MaxMin }})</th>
-                        <td>{{ fo.__html__() | safe }}</td>
-                        <th>Función objetivo ({{ MaxMin }})</th>
-                        <td>{{ fo.__html__() | safe }}</td>
-                    </tr>
-
-                    {% for res in restricciones %}
-
+            <div class="tables">
+                <table class="modelo-table">
+                    <tbody>
                         <tr>
-                            <th>Restriccion No. {{ loop.index }}</th>
-                            <td>{{ res.__html__() | safe }}</td>
-                            <th>Restriccion No. {{ loop.index }}</th>
-                            <td>{{ res.__html__() | safe }}</td>
+                            <th>Función objetivo ({{ MaxMin }})</th>
+                            <td>{{ fo | safe }}</td>
                         </tr>
-                    {% endfor %}
-                    <tr>
-                        <th>No negatividad</th>
-                        <td> X<sub>1</sub>, X<sub>2</sub> &ge; 0</td>
-                        <th>No negatividad</th>
-                        <td> X<sub>1</sub>, X<sub>2</sub> &ge; 0</td>
-                    </tr>
-                </tbody>
-            </table>
+    
+                        {% for res in restricciones %}
+    
+                            <tr>
+                                <th>Restriccion No. {{ loop.index }}</th>
+                                <td>{{ res | safe }}</td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <th>No negatividad</th>
+                            <td> X<sub>1</sub>, X<sub>2</sub> &ge; 0</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="modelo-table">
+                    <tbody>
+                        <tr>
+                            <th>Función objetivo ({{ MaxMin }})</th>
+                            <td>{{ fo | safe }}</td>
+                        </tr>
+    
+                        {% for res in new_restric %}
+    
+                            <tr>
+                                <th>Restriccion No. {{ loop.index }}</th>
+                                <td>{{ res | safe }}</td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <th>No negatividad</th>
+                            <td> X<sub>1</sub>, X<sub>2</sub> &ge; 0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="info-page selected">
             <h3 class="form-title">Solución Óptima</h3>
-            <table class="modelo-table">
-                <thead>
-                    <tr>
-                        <th style="font-size: 45px; text-align: center;">Z</th>
-                        <th style="font-size: 45px; text-align: center;">X1</th>
-                        <th style="font-size: 45px; text-align: center;">X2</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="font-size: 45px; text-align: center;" >17/5</td>
-                        <td style="font-size: 45px; text-align: center;" >2/5</td>
-                        <td style="font-size: 45px; text-align: center;" >9/5</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="carrousel">
+                <div class="grande">
+                    <table class="modelo-table">
+                        <tbody>
+                            <tr>
+                                <th>Función objetivo ({{ MaxMin }})</th>
+                                <td>{{ fo | safe }}</td>
+                            </tr>
+        
+                            {% for res in restricciones %}
+        
+                                <tr>
+                                    <th>Restriccion No. {{ loop.index }}</th>
+                                    <td>{{ res | safe }}</td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <th>No negatividad</th>
+                                <td> X<sub>1</sub>, X<sub>2</sub> &ge; 0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <img src="#" alt="" class="img">
+                </div>
+                <ul class="puntos">
+                    <li class="punto"></li>
+                    <li class="punto"></li>
+                </ul>
+            </div>
         </div>
         <div class="info-page">
-            <!-- La gracias es que la tabla se vaya repitiendo por cada iteracion. Hasta que llegue a la solucion basica inicial factible.-->
-            <h3 class="form-title">Tabla Solucion basica</h3>
-            <table class="modelo-sol">
-                <thead>
-                    <tr>
-                        <th rowspan="2">Iteracion</th>
-                        <th rowspan="2">Ecuacion</th>
-                        <th rowspan="2">Variables Básicas</th>
-                        <th colspan="2">Variables Originales</th>
-                        <th colspan="4">Variables Agregadas</th>
-                        <th rowspan="2">Lado Derecho</th>
-                        <th rowspan="2">Cociente Minimo</th>
-                    </tr>
-                    <tr>
-                        <th>X1</th>
-                        <th>X2</th>
-                        <th>H1</th>
-                        <th>E1</th>
-                        <th>A1</th>
-                        <th>A2</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for data in data_table['puntos'] %}
-                        {% if data['Solu'] %}
-
-                            <tr class="row-selected">
-                                <td class="values">{{ data['Punto']}}</td>
-                                <td class="values">{{ data['Coordenada X (X1)'] }}</td>
-                                <td class="values">{{ data['Coordenada Y (X2)'] }}</td>
-                                <td class="values">{{ data['Valor de la función objetivo (Z)'] }}</td>
-                            </tr>
-
-                        {% else %}
-
-                            <tr>
-                                <td class="values">{{ data['Punto']}}</td>
-                                <td class="values">{{ data['Coordenada X (X1)'] }}</td>
-                                <td class="values">{{ data['Coordenada Y (X2)'] }}</td>
-                                <td class="values">{{ data['Valor de la función objetivo (Z)'] }}</td>
-                            </tr>
-                        
-                        {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
-            <div class="form-check form-switch mt-3">
-                <input class="form-check-input" type="checkbox" id="checkbox" onclick="convert()">
-                <label class="form-check-label" for="flexSwitchCheckDefault">Ver los valores en fracciones</label>
-            </div>
+           
         </div>
     </div>
 </div>
 <script>
+    $('.carousel').carousel()
     function convert(){
         if(document.getElementById('checkbox').checked){
             $(".values").each(function(){

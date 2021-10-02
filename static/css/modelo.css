@@ -86,7 +86,11 @@
 }
 
 .modelo-table{
-    margin-top: 60px;
+    margin: 60px 30px;
+}
+.modelo-table:first-child{
+    flex-grow: 3;
+    margin-right: 0px;
 }
 table{
     border-collapse: collapse;
@@ -119,4 +123,72 @@ table tr:hover{
 .row-selected{
     background-color: rgba(0,231,177,0.9) !important;
     color: #003868 !important;
+}
+
+.tables{
+    display: flex;
+}
+
+
+.carrousel{
+    width: 90%;
+    max-width: 120em;
+    padding: 10px;
+    color: #000;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 5px 5px 20px #c9c9c9;
+    overflow: hidden;
+}
+.carrousel .grande{
+    width: 200%;
+    padding: 10px;
+    color: #000;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 5px 5px 20px #c9c9c9;
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    
+    transform: translateX(0%);
+
+    transition: all 0.5s ease;
+    transform: translateX(-50%);
+}
+.carrousel .img{
+    width: calc( 100% / 2 - 2em);
+    min-height: 10vh;
+    color: #000;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 5px 5px 20px #c9c9c9;
+}
+.carrousel .puntos{
+    width: 100%;
+    margin: 5px 0 0;
+    padding: 3px;
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+}
+.carrousel .punto{
+    width: 10px;
+    height: 10px;
+    margin: 6px;
+    border-radius: 5px;
+    background-color: #ccc;
+    box-shadow: 10px 10px 20px #c9c9c9;
+    
+    cursor: pointer;
+}
+.carrousel .punto.activo {
+    background-color: lightblue;
+  }
+.punto::marker{
+    content: none;
 }

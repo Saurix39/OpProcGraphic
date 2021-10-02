@@ -19,4 +19,16 @@ document.addEventListener('DOMContentLoaded', () => {
             right++;
         }
     }
+
+    const grande = document.querySelector(".grande");
+    const puntos = document.querySelectorAll(".punto");
+
+    puntos.forEach( (punto, position)=>{
+        puntos[position].addEventListener("click", ()=>{
+    
+            calcWidth = position * -50 // 50 equivale al porcentaje que moveremos de translate X 
+            console.log(calcWidth)
+            grande.style.transform = `translateX(${ calcWidth }%)`;
+        })
+    })
 });

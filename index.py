@@ -1,3 +1,4 @@
+from types import new_class
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from os import remove, path
 from flask.wrappers import Response
@@ -124,11 +125,59 @@ def dosFases(data):
     matrices_fase2=obj_matriz.fase2()
     for value in matrices_fase2:
         value.imprimir()
+
+    
+    func_obj = data.get('Funcion objetivo')
+    func_obj_x1 = float(func_obj['x1'])
+    func_obj_x2 = float(func_obj['x2'])
+    min_max = data.get('Minmax')
+    func_obj_ecua = Ecuacion(func_obj_x1, func_obj_x2, "=", 'Indefinido')
+    restricciones = []
+    for rest in restric:
+        restriccion=Ecuacion(float(rest['x1']),float(rest['x2']),rest['op'],float(rest['result']))
+        restricciones.append(restriccion)
+    print("_______________")
+    arrays_restric = mapearRestric(restric)
+    new_FO = mapearFuncObjetivo(func_obj)
+
+    #return render_template('dosFases.html', matriz=matrices_fase1[0])
+    return render_template('dosFases.html', data_table = '', restricciones= arrays_restric[0], new_restric=arrays_restric[1], fo = new_FO, nom='', MaxMin= "Maximizar" if data.get('Minmax') == "max" else "Minimizar")
     # SE LLAMA A LA FUNCION FASE1 QUE NOS DEVUELVE UNA LISTA DE MATRICES Y LA MATRIZ FINAL 
     #if(var_arti > 1):
     #    matriz_fase1, obj_matriz = fase1(obj_matriz)
     # SE LLAMA A LA FUNCION FASE2
     #fase2(obj_matriz, func_obj, Minmax)
+
+def mapearFuncObjetivo(func_objetivo):
+    new_FO = ''
+    for key, value in func_objetivo.items():
+        new_value = '+' + str(value) if int(value) > 0 and not 'x1' in key else value
+        new_FO += (new_value + key + ' ').upper()
+    return new_FO
+
+def mapearRestric(restric):
+    old_array_restric = []
+    new_array_restric = []
+
+    for res in restric:
+        old_restric = ''
+        new_restric = ''
+        for key, value in res.items():
+            if key != 'op' and key != 'result':
+                new_value = '+' + str(value) if int(value) > 0 and not 'x1' in key else str(value)
+                new_restric += (new_value + key + ' ').upper()
+            
+            if key != 'op' and key != 'result' and 'x' in key:
+                old_value = '+' + str(value) if int(value) > 0 and not 'x1' in key else str(value)
+                old_restric += (old_value + key + ' ').upper()
+                
+        new_restric += res['op'] + ' ' + res['result']
+        old_restric += res['op'] + ' ' + res['result']
+        new_array_restric.append(new_restric)
+        old_array_restric.append(old_restric)
+        
+    return [old_array_restric, new_array_restric]
+
 
 # FUNCION PARA LA FASE 1
 def fase1(obj_mat):
