@@ -70,26 +70,25 @@ Método Dos Fases
             <h3 class="form-title">Solución Óptima</h3>
             <div class="carrousel">
                 <div class="carrousel__container">
+                    {% for mat in objMat1 %}
                     <table class="modelo-table">
                         <tbody>
                             <tr>
-                                <th>Función objetivo ({{ MaxMin }})</th>
-                                <td>{{ fo | safe }}</td>
+                                <th>Cj<th>
+                                {% for hd in mat.getFilaCj() %}
+                                    <th>{{hd}}</th>
+                                {% endfor %}
                             </tr>
-        
-                            {% for res in restricciones %}
-        
-                                <tr>
-                                    <th>Restriccion No. {{ loop.index }}</th>
-                                    <td>{{ res | safe }}</td>
-                                </tr>
-                            {% endfor %}
                             <tr>
-                                <th>No negatividad</th>
-                                <td> X<sub>1</sub>, X<sub>2</sub> &ge; 0</td>
+                                <th>Cx</th>
+                                {% for hd in mat.getHeader() %}
+                                    <th>{{hd}}</th>
+                                {% endfor %}
+                                <th> Xb </th>
                             </tr>
                         </tbody>
                     </table>
+                    {% endfor %}
                     <img src="#" alt="" class="img">
                 </div>
                 <ul class="puntos">

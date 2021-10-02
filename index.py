@@ -141,7 +141,17 @@ def dosFases(data):
     new_FO = mapearFuncObjetivo(func_obj)
 
     #return render_template('dosFases.html', matriz=matrices_fase1[0])
-    return render_template('dosFases.html', data_table = '', restricciones= arrays_restric[0], new_restric=arrays_restric[1], fo = new_FO, nom='', MaxMin= "Maximizar" if data.get('Minmax') == "max" else "Minimizar")
+    print(obj_matriz)
+    for mat in matrices_fase1:
+        mat.imprimir()
+        print("____________fase1__________")
+
+    for mat in matrices_fase2:
+        mat.imprimir()
+        print("___________fase2___________")
+    
+
+    return render_template('dosFases.html', objMat1=matrices_fase1, objMat2=matrices_fase2,data_table = '', restricciones= arrays_restric[0], new_restric=arrays_restric[1], fo = new_FO, nom='', MaxMin= "Maximizar" if data.get('Minmax') == "max" else "Minimizar")
     # SE LLAMA A LA FUNCION FASE1 QUE NOS DEVUELVE UNA LISTA DE MATRICES Y LA MATRIZ FINAL 
     #if(var_arti > 1):
     #    matriz_fase1, obj_matriz = fase1(obj_matriz)
