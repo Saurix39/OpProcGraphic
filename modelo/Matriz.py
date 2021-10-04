@@ -19,8 +19,10 @@ class Matriz:
         self._generateZjCj()
 
     def getZ(self):
-        return self._Z
+        return round(self._Z,3)
     def getZjCj(self):
+        for idx, value in enumerate(self._ZjCj):
+            self._ZjCj[idx]=round(value,3)
         return self._ZjCj
     def getHeader(self):
         return self._header
@@ -56,11 +58,11 @@ class Matriz:
         for idx,valor in enumerate(self._matrix[i]):
             if(idx == (self._matrix[i].size-1)):
                 fila.append(self.columna_xb[i])
-                fila.append(valor)
+                fila.append(round(valor,3))
             else:
-                fila.append(valor)
+                fila.append(round(valor,3))
         print(fila)
-        return fila
+        return fila    
     def fase2(self):
         matrices_fase2=[]
         self._eliminarColumnasR()
