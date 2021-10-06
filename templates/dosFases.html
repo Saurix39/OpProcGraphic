@@ -48,7 +48,7 @@ Método Dos Fases
                     <tbody>
                         <tr>
                             <th>Función objetivo ({{ MaxMin }})</th>
-                            <td>{{ fo | safe }}</td>
+                            <td>{{ objMat1[0].estandarizacionFO() }}</td>
                         </tr>
     
                         {% for res in new_restric %}
@@ -67,11 +67,11 @@ Método Dos Fases
             </div>
         </div>
         <div class="info-page selected">
-            <h3 class="form-title">Solución Óptima</h3>
+            <h3 class="form-title">Fase 1</h3>
             <div class="carrousel">
                 <div class="carrousel__container">
                     {% for mat in objMat1 %}
-                    <table class="modelo-table">
+                    <table class="modelo-table table-fase1">
                         <tbody>
                             <tr id="tr-editable">
                                 <th>Cj</th>
@@ -91,10 +91,10 @@ Método Dos Fases
                                 <th>Bi</th>
                             </tr>
                             {% for fila in mat.getMatriz() %}
-                                <tr>
+                                <tr class="{{'pivote' if loop.index-1 == mat.getRenglonPivote()}}">
                                     {% set datosFila = mat.datosDeFilaMatriz(loop.index-1) %}
                                     {% for valor in datosFila %}
-                                        <th>{{valor}}</th>
+                                        <th class="{{'pivote' if loop.index-2 == mat.getColumnaPivote()}}">{{valor}}</th>
                                     {% endfor %}
                                 </tr>
                             {%endfor%}
@@ -110,16 +110,69 @@ Método Dos Fases
                         </tbody>
                     </table>
                     {% endfor %}
-                    <img src="#" alt="" class="img">
                 </div>
                 <ul class="puntos">
-                    <li class="punto activo"></li>
-                    <li class="punto"></li>
+                    {% for mat in objMat1 %}
+                        <li class="punto"></li>
+                    {%endfor%}    
                 </ul>
             </div>
         </div>
+        <div class="info-page selected">
+            <h3 class="form-title">Fase 2</h3>
+            <!-- <div class="carrousel">
+                <div class="carrousel__container-fase2">
+                    {% for mat in objMat1 %}
+                    <table class="modelo-table table-fase2">
+                        <tbody>
+                            <tr id="tr-editable">
+                                <th>Cj</th>
+                                {% for i in mat.getFilaCj() %}
+                                    <th>{{i}}</th>
+                                {% endfor %}
+                                <th colspan="2">Tabla {{ loop.index }}</th>
+                            </tr>
+                            <tr>
+                                <th>Cx</th>
+                                {% for i in mat.getHeader() %}
+                                    {%if loop.index != mat.getHeader()|length%}
+                                        <th>{{i}}</th>
+                                    {%endif%}
+                                {% endfor %}
+                                <th> Xb </th>
+                                <th>Bi</th>
+                            </tr>
+                            {% for fila in mat.getMatriz() %}
+                                <tr class="{{'pivote' if loop.index-1 == mat.getRenglonPivote()}}">
+                                    {% set datosFila = mat.datosDeFilaMatriz(loop.index-1) %}
+                                    {% for valor in datosFila %}
+                                        <th class="{{'pivote' if loop.index-2 == mat.getColumnaPivote()}}">{{valor}}</th>
+                                    {% endfor %}
+                                </tr>
+                            {%endfor%}
+                            <tr>
+                                <th>Zj-Cj</th>
+                                {% for valor in mat.getZjCj() %}
+                                    <th>{{valor}}</th>
+                                {% endfor %}
+                                <th colspan="2">
+                                    Z={{ mat.getZ() }}
+                                </th>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {% endfor %}
+                </div>
+                <ul class="puntos">
+                    {% for mat in objMat1 %}
+                        <li class="punto-fase2"></li>
+                    {%endfor%}    
+                </ul>
+            </div> -->
+            
+        </div>
         <div class="info-page">
-           
+            <h3 class="form-title">Resultado</h3>
         </div>
     </div>
 </div>

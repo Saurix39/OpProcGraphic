@@ -29,13 +29,16 @@ class Matriz:
     def getFilaCj(self):
         return self.fila_cj
     def getColumnaXb(self):
-        print("holaaaa")
         print(self.columna_xb)
         return self.columna_xb
     def getMatriz(self):
         return self._matrix
     def getColumnaZj(self):
         return self.columna_zj
+    def getColumnaPivote(self):
+        return self._columnaPivote
+    def getRenglonPivote(self):
+        return self._renglonPivote
 
     def fase1(self):
         matrices_fase1 = []
@@ -277,6 +280,19 @@ class Matriz:
         #             break
         #     self.sumar(0,self._matrix[0][self._columnaPivote])
 
+    def estandarizacionFO(self):
+        string_R = ''
+
+        for index, value in enumerate(self._header):
+            if 'R' in value:
+                if self.fila_cj[index] > 0 and index == 0:
+                    string_R += value
+                elif  self.fila_cj[index] > 0 :
+                    string_R += '+' + value
+                else:
+                    string_R += '-' + value
+        return string_R
+                
     def imprimir(self):
         print(self.fila_cj)
         print(self._header)

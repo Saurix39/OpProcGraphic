@@ -57,7 +57,7 @@
     padding-top: 70px;
 }
 .slider{
-    width: 300%;
+    width: 400%;
     height: 100%;
     display: flex;
     flex-flow: row nowrap;
@@ -108,9 +108,6 @@ table tr{
     color: #fff;
 }
 
-table tr:nth-child(even){
-    background-color: #fAfAfA;
-}
 table tr:hover{
     background-color: #f2f2f2;
 }
@@ -132,6 +129,13 @@ table tr:hover{
     display: flex;
 }
 
+.pivote{
+    background-color: #6cd8b9;
+}
+.pivote:hover{
+    background-color: #28E7B1;
+}
+
 
 .carrousel{
     width: 90%;
@@ -142,6 +146,7 @@ table tr:hover{
     background-color: #fff;
     box-shadow: 5px 5px 20px #c9c9c9;
     overflow: hidden;
+    margin-top: 30px;
 }
 .carrousel .carrousel__container{
     width: 200%;
@@ -165,6 +170,7 @@ table tr:hover{
     border-radius: 5px;
     background-color: #fff;
     box-shadow: 5px 5px 20px #c9c9c9;
+    margin: 40px 20px;
 }
 .carrousel .puntos{
     width: 100%;
