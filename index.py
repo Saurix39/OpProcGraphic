@@ -89,16 +89,7 @@ def dosFases(data):
     for i in range(0,var_arti):
         vec_head.append('R'+str(i+1))
     vec_head.append('Y')
-    # SE ARMA LA FILA PARA R0 Y LLENANDO LOS ESPACIOS NO DECLARADOS CON 0 
-    #vec_r0=[]
-    #for head in vec_head:
-    #    if('R0' == head):
-    #        vec_r0.append(1)
-    #    elif('R' in head):
-    #        vec_r0.append(-1)
-    #    else:
-    #        vec_r0.append(0)
-    #matriz.append(vec_r0)
+
     # SE ARMA LA COLUMNA INICIAL QUE CONTIENE LOS NOMBRES DE CADA FILA
     # SE ARMA CADA UNA DE LAS FILAS
     column_ini=[]
@@ -119,19 +110,10 @@ def dosFases(data):
                 vec_res.append(float(0))
         matriz.append(vec_res)
     # SE INSTANCIA EL OBJETO DE TIPO MATRIZ QUE CONTIENE LA MATRIZ A UTILIZAR
-    fila_cj = [0,0,0,0,-1,-1]
     obj_matriz = Matriz(vec_head, column_ini , matriz, Minmax, func_obj)
     matrices_fase1=obj_matriz.fase1()
     matrices_fase2=obj_matriz.fase2()
-    for value in matrices_fase2:
-        value.imprimir()
 
-    
-    func_obj = data.get('Funcion objetivo')
-    func_obj_x1 = float(func_obj['x1'])
-    func_obj_x2 = float(func_obj['x2'])
-    min_max = data.get('Minmax')
-    func_obj_ecua = Ecuacion(func_obj_x1, func_obj_x2, "=", 'Indefinido')
     restricciones = []
     for rest in restric:
         restriccion=Ecuacion(float(rest['x1']),float(rest['x2']),rest['op'],float(rest['result']))
@@ -152,11 +134,6 @@ def dosFases(data):
     
 
     return render_template('dosFases.html', objMat1=matrices_fase1, objMat2=matrices_fase2,data_table = '', restricciones= arrays_restric[0], new_restric=arrays_restric[1], fo = new_FO, nom='', MaxMin= "Maximizar" if data.get('Minmax') == "max" else "Minimizar")
-    # SE LLAMA A LA FUNCION FASE1 QUE NOS DEVUELVE UNA LISTA DE MATRICES Y LA MATRIZ FINAL 
-    #if(var_arti > 1):
-    #    matriz_fase1, obj_matriz = fase1(obj_matriz)
-    # SE LLAMA A LA FUNCION FASE2
-    #fase2(obj_matriz, func_obj, Minmax)
 
 def mapearFuncObjetivo(func_objetivo):
     new_FO = ''
@@ -187,52 +164,6 @@ def mapearRestric(restric):
         old_array_restric.append(old_restric)
         
     return [old_array_restric, new_array_restric]
-
-
-# FUNCION PARA LA FASE 1
-def fase1(obj_mat):
-    matr_fa1=[]
-    #obj_mat.sumaR0()
-    #while(obj_mat.continua()):
-    obj_mat.column_pivot()
-    obj_mat.imprimir()
-    #obj_mat.filaPivote()
-    #obj_mat.setNewColumn()
-    #obj_mat.inverso()
-    #obj_mat.sumarFilas()
-    #matr_fa1.append(obj_mat)
-    #return matr_fa1, obj_mat
-
-# FUNCION PARA LA FASE 2
-def fase2(obj_mat, func_obj, Minmax):
-    obj_mat.imprimir()
-    obj_mat.eliminarCol()
-    obj_mat.eliminarFil()
-    #obj_mat.ordenar()
-    obj_mat.agreCabe()
-    obj_mat.agregColumnZ()
-    obj_mat.agregarZ(enconZ(func_obj))
-    obj_mat.restarEnZ()
-    if(Minmax=="max"):
-        while(obj_mat.continuaFaseDosMax()):
-            obj_mat.columnaPivoteFaseDosMax()
-            obj_mat.filaPivote(True)
-            obj_mat.setNewColumn()
-            obj_mat.inverso()
-            obj_mat.sumarFilas()
-    elif(Minmax=="min"):
-        while(obj_mat.continuaFaseDosMin()):
-            obj_mat.columnaPivoteFaseDosMin()
-            obj_mat.filaPivote(True)
-            obj_mat.setNewColumn()
-            obj_mat.inverso()
-            obj_mat.sumarFilas()
-    obj_mat.imprimir()
-
-# DEVUELVE LA FILA PARA Z LA CUAL ES LA FUNCION OBJETIVO DESPEJADA
-# Z-X1-X2-X3 = 0
-def enconZ(func_obj):
-    return [1]+list((float(i)*(-1.0) for i in func_obj.values()))
 
 def grafico(data):
 

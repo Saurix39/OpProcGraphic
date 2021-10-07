@@ -49,7 +49,6 @@ class Matriz:
             self._sumarFilas()
             self._setZ()
             self._generateZjCj()
-            #self.imprimir()
         matrices_fase1.append(copy.deepcopy(self))
         return matrices_fase1
 
@@ -61,8 +60,8 @@ class Matriz:
                 fila.append(round(valor,3))
             else:
                 fila.append(round(valor,3))
-        print(fila)
-        return fila    
+        return fila
+
     def fase2(self):
         matrices_fase2=[]
         self._eliminarColumnasR()
@@ -143,8 +142,7 @@ class Matriz:
             if (e < res[indice] and e > 0):
                 indice = i
         self._renglonPivote = indice
-        
-
+    
     # Selecciona el mas positivo del R0 para escoger la columna pivote
     def _columnaPivoteFunc(self):
         res = None
@@ -154,60 +152,6 @@ class Matriz:
             res = min(self._ZjCj)
 
         self._columnaPivote = self._ZjCj.index(res)
-    
-    def continua(self):
-        cont = False
-        for indice, cabecera in enumerate(self._header):
-            if('x' in cabecera or 'H' in cabecera or 'S' in cabecera):
-                if(self._matrix[0][indice]>0):
-                    cont=True
-                    break
-        return cont
-
-    def continuaFaseDosMax(self):
-        # inicio = len(self.columna_xb)
-        # control = False
-        # for idx in range(inicio,len(self._matrix[0])):
-        #     if(self._header[idx]!='Y' and self._matrix[0][idx] < 0):
-        #         control= True
-        #         break
-        control = False
-        for idx in range(0,len(self._matrix[0])):
-           if(self._header[idx] not in self.columna_xb and self._header[idx]!='Y' and self._matrix[0][idx] < 0):
-               control= True
-               break
-        return control
-    
-    def continuaFaseDosMin(self):
-        control = False
-        # inicio = len(self.columna_xb)
-        # for idx in range(inicio,len(self._matrix[0])):
-        #    if(self._header[idx]!='Y' and self._matrix[0][idx] > 0):
-        #        control= True
-        #        break
-        for idx in range(0,len(self._matrix[0])):
-            if(self._header[idx] not in self.columna_xb and self._header[idx]!='Y' and self._matrix[0][idx] > 0):
-                control= True
-                break
-        return control
-
-    def columnaPivoteFaseDosMax(self):
-        masNeg = 0
-        idx_global = None
-        for idx in range(0,len(self._matrix[0])):
-            if(self._header[idx] not in self.columna_xb and self._header[idx]!='Y' and self._matrix[0][idx] < masNeg):
-                masNeg = self._matrix[0][idx]
-                idx_global = idx
-        self._columnaPivote=idx_global
-
-    def columnaPivoteFaseDosMin(self):
-        masPos = 0
-        idx_global = None
-        for idx in range(0,len(self._matrix[0])):
-            if(self._header[idx] not in self.columna_xb and self._header[idx]!='Y' and self._matrix[0][idx] > masPos):
-                masPos = self._matrix[0][idx]
-                idx_global = idx
-        self._columnaPivote=idx_global
         
     def _sumarFilas(self):
         for idx, fila in enumerate(self._matrix):
@@ -237,45 +181,6 @@ class Matriz:
         for idx, value in enumerate(vec_idx):
             self._header.pop(value-idx)
             self._matrix = np.delete(self._matrix,(value-idx),axis=1)
-
-    def ordenar(self):        
-        colum_ini_aux = self.columna_xb.copy()
-        self.columna_xb = sorted(self.columna_xb)
-        mat_aux = self._matrix.copy()
-        for idx, val in enumerate(colum_ini_aux):                 
-            new_idx = self.columna_xb.index(val)
-            mat_aux[new_idx] = self._matrix[idx].copy()
-        self._matrix= mat_aux.copy()
-
-    def agreCabe(self):
-        self._header=['Z']+self._header
-    
-    def agregarZ(self, zfile):
-        iter = len(self._header) - len(zfile)
-        for i in range(0,iter):
-            zfile.append(float(0))
-        zfile=np.array(zfile)
-        self._matrix = np.insert(self._matrix, [0] ,zfile,axis = 0)
-        self.columna_xb = ['Z'] + self.columna_xb
-    
-    def agregColumnZ(self):
-        zeros_vec = np.zeros(1)
-        self._matrix = np.insert(self._matrix, [0] ,zeros_vec,axis = 1)
-
-    def restarEnZ(self):
-        for idx, celda in enumerate(self._matrix[0]):
-            if(self._header[idx] !="Z" and self._header[idx] in self.columna_xb and celda !=0):
-                print(self._header[idx])
-                indiceDeFila = self.columna_xb.index(self._header[idx])
-                self._renglonPivote=indiceDeFila
-                self.sumar(0,celda)
-        # for idx in range(1,len(self._matrix)):
-        #     self._renglonPivote=idx
-        #     for idx2 in range(1, len(self._matrix[idx])):
-        #         if(self._matrix[idx][idx2]==1):
-        #             self._columnaPivote=idx2
-        #             break
-        #     self.sumar(0,self._matrix[0][self._columnaPivote])
 
     def imprimir(self):
         print(self.fila_cj)
