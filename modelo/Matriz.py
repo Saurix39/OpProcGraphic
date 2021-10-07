@@ -292,6 +292,13 @@ class Matriz:
                 else:
                     string_R += '-' + value
         return string_R
+    
+    def respuestaFinal(self):
+        responseFinal = []
+        for index, value in enumerate(self.columna_xb):
+            responseFinal.append([value.upper(), round(self._matrix[index,-1], 3)])
+        responseFinal.append(['Z', round(self._Z, 3)])
+        return responseFinal
                 
     def imprimir(self):
         print(self.fila_cj)
@@ -301,4 +308,5 @@ class Matriz:
         print(self.columna_zj)
         print(self._ZjCj)
         print(self._Z)
+        self.respuestaFinal()
         
