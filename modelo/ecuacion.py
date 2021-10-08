@@ -105,13 +105,9 @@ class Ecuacion:
         if self.x != 0 and self.y != 0 and self.resultado!='Indefinido':
             string = f"{round(self.x,3)}X + {round(self.y,3)}Y {element[self.tipo]} {round(self.resultado,3)}"
         elif self.x != 0 and self.y != 0 and self.resultado=='Indefinido':
-            string = f"{round(self.x,3)}X + {round(self.y,3)}Y {element[self.tipo]} {self.resultado}"
+            string = f"{round(self.x,3)}X + {round(self.y,3)}Y"
         elif self.x == 0:
             string = f"{round(self.y,3)}Y {element[self.tipo]} {round(self.resultado,3)}"
         elif self.y == 0:
             string = f"{round(self.x,3)}X {element[self.tipo]} {round(self.resultado,3)}"
         return string
-
-
-
-
