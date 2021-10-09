@@ -13,7 +13,6 @@ import datetime
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-#CORS(app)
 numRestricciones = 1
 
 # RUTA INICIAL 
@@ -60,6 +59,7 @@ def dosFases(data):
     var_super = 0
     var_hol = 0
     var_arti = 0
+    infinito=True
     # VECTOR DE LOS ENCABEZADOS DE LA MATRIZ
     vec_head = []
     # SE HACE EL CONTEO DE LAS VARIABLES
@@ -68,6 +68,11 @@ def dosFases(data):
             cant_variables = cant_variables + 1
     # SE HACE EL CONTEO DE LAS VARIABLES ADICIONALES POR CADA RESTRICCÓN
     for res in restric:
+        if(res['op']=='>=' and float(res['x1']) < 0 and float(res['result'])<=0):
+            for clave in res:
+                if(clave != 'op'):
+                    res[clave]=str(0 if float(res[clave])==0 else float(res[clave])*(-1))
+            res['op']='<='
         if(res['op'] == '>='):
             var_super = var_super + 1
             var_arti = var_arti + 1
@@ -79,66 +84,71 @@ def dosFases(data):
         elif(res['op'] == '='):
             var_arti = var_arti + 1
             res['R'+str(var_arti)]=1
-    # SE AGREGAN X, S, R & Y AL VECTOR HEADER DEPENDIENDO DE LOS CONTEOS DE VARIABLES ANTERIORES
-    for i in range(cant_variables):
-        vec_head.append('x'+str(i+1))
-    for i in range(var_hol):
-        vec_head.append('H'+str(i+1))
-    for i in range(var_super):
-        vec_head.append('S'+str(i+1))
-    for i in range(0,var_arti):
-        vec_head.append('R'+str(i+1))
-    vec_head.append('Y')
+        if(res['op']=='<=' or res['op']=='='):
+            infinito=False
+    if(infinito == True and Minmax=='max'):
+        print("No tiene solucion factible")
+    else:
+        # SE AGREGAN X, S, R & Y AL VECTOR HEADER DEPENDIENDO DE LOS CONTEOS DE VARIABLES ANTERIORES
+        for i in range(cant_variables):
+            vec_head.append('x'+str(i+1))
+        for i in range(var_hol):
+            vec_head.append('H'+str(i+1))
+        for i in range(var_super):
+            vec_head.append('S'+str(i+1))
+        for i in range(0,var_arti):
+            vec_head.append('R'+str(i+1))
+        vec_head.append('Y')
 
-    # SE ARMA LA COLUMNA INICIAL QUE CONTIENE LOS NOMBRES DE CADA FILA
-    # SE ARMA CADA UNA DE LAS FILAS
-    column_ini=[]
-    for idx, res in enumerate(restric):
-        #column_ini.append('R'+str(idx+1))
-        #Vector de la restriccion
-        vec_res=[]
-        for head in vec_head:
-            if(head in res.keys()):
-                vec_res.append(float(res[head]))
-                if('R' in head):
-                    column_ini.append(head)
-                elif('H' in head):
-                    column_ini.append(head)
-            elif(head == 'Y'):
-                vec_res.append(float(res['result']))
-            else:
-                vec_res.append(float(0))
-        matriz.append(vec_res)
-    # SE INSTANCIA EL OBJETO DE TIPO MATRIZ QUE CONTIENE LA MATRIZ A UTILIZAR
-    obj_matriz = Matriz(vec_head, column_ini , matriz, Minmax, func_obj)
-    matrices_fase1=obj_matriz.fase1()
-    matrices_fase2=obj_matriz.fase2()
+        # SE ARMA LA COLUMNA INICIAL QUE CONTIENE LOS NOMBRES DE CADA FILA
+        # SE ARMA CADA UNA DE LAS FILAS
+        column_ini=[]
+        for res in restric:
+            #column_ini.append('R'+str(idx+1))
+            #Vector de la restriccion
+            vec_res=[]
+            for head in vec_head:
+                if(head in res.keys()):
+                    vec_res.append(float(res[head]))
+                    if('R' in head):
+                        column_ini.append(head)
+                    elif('H' in head):
+                        column_ini.append(head)
+                elif(head == 'Y'):
+                    vec_res.append(float(res['result']))
+                else:
+                    vec_res.append(float(0))
+            matriz.append(vec_res)
+        # SE INSTANCIA EL OBJETO DE TIPO MATRIZ QUE CONTIENE LA MATRIZ A UTILIZAR
+        obj_matriz = Matriz(vec_head, column_ini , matriz, Minmax, func_obj)
+        matrices_fase1=obj_matriz.fase1()
+        matrices_fase2=obj_matriz.fase2()
 
-    restricciones = []
-    for rest in restric:
-        restriccion=Ecuacion(float(rest['x1']),float(rest['x2']),rest['op'],float(rest['result']))
-        restricciones.append(restriccion)
-    print("_______________")
-    arrays_restric = mapearRestric(restric)
-    new_FO = mapearFuncObjetivo(func_obj)
+        restricciones = []
+        for rest in restric:
+            restriccion=Ecuacion(float(rest['x1']),float(rest['x2']),rest['op'],float(rest['result']))
+            restricciones.append(restriccion)
+        print("_______________")
+        arrays_restric = mapearRestric(restric)
+        new_FO = mapearFuncObjetivo(func_obj)
 
-    #return render_template('dosFases.html', matriz=matrices_fase1[0])
-    print(obj_matriz)
-    for mat in matrices_fase1:
-        mat.imprimir()
-        print("____________fase1__________")
+        #return render_template('dosFases.html', matriz=matrices_fase1[0])
+        print(obj_matriz)
+        for mat in matrices_fase1:
+            mat.imprimir()
+            print("____________fase1__________")
 
-    for mat in matrices_fase2:
-        mat.imprimir()
-        print("___________fase2___________")
-    
+        for mat in matrices_fase2:
+            mat.imprimir()
+            print("___________fase2___________")
+        
 
-    return render_template('dosFases.html', objMat1=matrices_fase1, objMat2=matrices_fase2,data_table = '', restricciones= arrays_restric[0], new_restric=arrays_restric[1], fo = new_FO, nom='', MaxMin= "Maximizar" if data.get('Minmax') == "max" else "Minimizar")
+        return render_template('dosFases.html', objMat1=matrices_fase1, objMat2=matrices_fase2,data_table = '', restricciones= arrays_restric[0], new_restric=arrays_restric[1], fo = new_FO, nom='', MaxMin= "Maximizar" if data.get('Minmax') == "max" else "Minimizar")
 
 def mapearFuncObjetivo(func_objetivo):
     new_FO = ''
     for key, value in func_objetivo.items():
-        new_value = '+' + str(value) if int(value) > 0 and not 'x1' in key else value
+        new_value = '+' + str(value) if int(value) > 0 and not 'x1' in key else str(value)
         new_FO += (new_value + key + ' ').upper()
     return new_FO
 
@@ -151,11 +161,11 @@ def mapearRestric(restric):
         new_restric = ''
         for key, value in res.items():
             if key != 'op' and key != 'result':
-                new_value = '+' + str(value) if int(value) > 0 and not 'x1' in key else str(value)
+                new_value = '+' + str(value) if float(value) > 0 and not 'x1' in key else str(value)
                 new_restric += (new_value + key + ' ').upper()
             
             if key != 'op' and key != 'result' and 'x' in key:
-                old_value = '+' + str(value) if int(value) > 0 and not 'x1' in key else str(value)
+                old_value = '+' + str(value) if float(value) > 0 and not 'x1' in key else str(value)
                 old_restric += (old_value + key + ' ').upper()
                 
         new_restric += res['op'] + ' ' + res['result']

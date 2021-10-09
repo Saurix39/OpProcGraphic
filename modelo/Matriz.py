@@ -29,8 +29,6 @@ class Matriz:
     def getFilaCj(self):
         return self.fila_cj
     def getColumnaXb(self):
-        print("holaaaa")
-        print(self.columna_xb)
         return self.columna_xb
     def getMatriz(self):
         return self._matrix
