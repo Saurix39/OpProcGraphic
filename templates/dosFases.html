@@ -65,6 +65,10 @@ Método Dos Fases
                     </tbody>
                 </table>
             </div>
+            <div class="form-check form-switch mt-3">
+                <input class="form-check-input" type="checkbox" id="checkbox" onclick="convert()">
+                <label class="form-check-label" for="flexSwitchCheckDefault">Ver los valores en fracciones</label>
+            </div>
         </div>
         <div class="info-page selected">
             <h3 class="form-title">Fase 1</h3>
@@ -76,7 +80,7 @@ Método Dos Fases
                             <tr id="tr-editable">
                                 <th>Cj</th>
                                 {% for i in mat.getFilaCj() %}
-                                    <th>{{i}}</th>
+                                    <th class="values">{{i}}</th>
                                 {% endfor %}
                                 <th colspan="2">Tabla {{ loop.index }}</th>
                             </tr>
@@ -94,16 +98,16 @@ Método Dos Fases
                                 <tr class="{{'pivote' if loop.index-1 == mat.getRenglonPivote()}}">
                                     {% set datosFila = mat.datosDeFilaMatriz(loop.index-1) %}
                                     {% for valor in datosFila %}
-                                        <th class="{{'pivote' if loop.index-2 == mat.getColumnaPivote()}}">{{valor}}</th>
+                                        <th class="{{'pivote' if loop.index-2 == mat.getColumnaPivote()}} values">{{valor}}</th>
                                     {% endfor %}
                                 </tr>
                             {%endfor%}
                             <tr>
                                 <th>Zj-Cj</th>
                                 {% for valor in mat.getZjCj() %}
-                                    <th>{{valor}}</th>
+                                    <th class="values">{{valor}}</th>
                                 {% endfor %}
-                                <th colspan="2">
+                                <th colspan="2" class="z">
                                     Z={{ mat.getZ() }}
                                 </th>
                             </tr>
@@ -128,7 +132,7 @@ Método Dos Fases
                             <tr id="tr-editable">
                                 <th>Cj</th>
                                 {% for i in mat.getFilaCj() %}
-                                    <th>{{i}}</th>
+                                    <th class="values">{{i}}</th>
                                 {% endfor %}
                                 <th colspan="2">Tabla {{ loop.index }}</th>
                             </tr>
@@ -146,16 +150,16 @@ Método Dos Fases
                                 <tr class="{{'pivote' if loop.index-1 == mat.getRenglonPivote()}}">
                                     {% set datosFila = mat.datosDeFilaMatriz(loop.index-1) %}
                                     {% for valor in datosFila %}
-                                        <th class="{{'pivote' if loop.index-2 == mat.getColumnaPivote()}}">{{valor}}</th>
+                                        <th class="{{'pivote' if loop.index-2 == mat.getColumnaPivote()}} values">{{valor}}</th>
                                     {% endfor %}
                                 </tr>
                             {%endfor%}
                             <tr>
                                 <th>Zj-Cj</th>
                                 {% for valor in mat.getZjCj() %}
-                                    <th>{{valor}}</th>
+                                    <th class="values">{{valor}}</th>
                                 {% endfor %}
-                                <th colspan="2">
+                                <th colspan="2" class="z">
                                     Z={{ mat.getZ() }}
                                 </th>
                             </tr>
@@ -176,8 +180,8 @@ Método Dos Fases
                 <tbody>
                     {% for value in objMat2[-1].respuestaFinal()%}
                     <tr>
-                        <th>{{value[0]}}</th>
-                        <th>{{value[1]}}</th>
+                        <th class="values">{{value[0]}}</th>
+                        <th class="values">{{value[1]}}</th>
                     {% endfor %}
                     </tr>
                 </tbody>
@@ -186,13 +190,20 @@ Método Dos Fases
     </div>
 </div>
 <script>
-    $('.carousel').carousel()
+    //$('.carousel').carousel();
     function convert(){
         if(document.getElementById('checkbox').checked){
             $(".values").each(function(){
-                if ( $(this).text() % 1 != 0) {
+                if ( $(this).text() % 1 != 0 && !isNaN($(this).text())) {
                     var result = toFraction($(this).text());
                     $(this).text(result[0]+'/'+result[1]);
+                }
+            });
+            $(".z").each(function(){
+                var valores = $(this).text().split("=");
+                if ( valores[1] % 1 != 0 && !isNaN(valores[1])) {
+                    var result = toFraction(valores[1]);
+                    $(this).text("Z="+result[0]+'/'+result[1]);
                 }
             });
         }else{
@@ -201,37 +212,43 @@ Método Dos Fases
                     $(this).text(toDecimal($(this).text()));
                 }
             });
+            $(".z").each(function(){
+                var valores = $(this).text().split("=");
+                if ( valores[1] % 1 != 0) {
+                    $(this).text("Z="+toDecimal(valores[1]));
+                }
+            });
         }
     }
 
-    var toFraction = function (dec) {
-        var is_neg = dec < 0;
-        dec = Math.abs(dec);
-        var done = false;
-        //you can adjust the epsilon to a larger number if you don't need very high precision
-        var n1 = 0, d1 = 1, n2 = 1, d2 = 0, n = 0, q = dec, epsilon = 1e-13;
-        while (!done) {
-            n++;
-            if (n > 10000) {
-                done = true;
+    var toFraction = function (decimal) {
+        var negative = decimal < 0;
+        decimal = Math.abs(decimal);
+        var final = false;
+        
+        var value1 = 0, aux1 = 1, value2 = 1, aux2 = 0, epoch = 0, val = decimal, epsilon = 1e-13;
+        while (!final) {
+            epoch++;
+            if (epoch > 10000) {
+                final = true;
             }
-            var a = parseInt(q);
-            var num = n1 + a * n2;
-            var den = d1 + a * d2;
-            var e = (q - a);
-            if (e < epsilon) {
-                done = true;
+            var valint = parseInt(val);
+            var result = value1 + valint * value2;
+            var denom = aux1 + valint * aux2;
+            var conv = (val - valint);
+            if (conv < epsilon) {
+                final = true;
             }
-            q = 1 / e;
-            n1 = n2;
-            d1 = d2;
-            n2 = num;
-            d2 = den;
-            if (Math.abs(num / den - dec) < epsilon || n > 30) {
-                done = true;
+            val = 1 / conv;
+            value1 = value2;
+            aux1 = aux2;
+            value2 = result;
+            aux2 = denom;
+            if (Math.abs(result / denom - decimal) < epsilon || epoch > 30) {
+                final = true;
             }
         }
-        return [is_neg ? -num : num, den];
+        return [negative ? -result : result, denom];
     };
 
     function toDecimal(frac){
@@ -243,15 +260,5 @@ Método Dos Fases
         return total
     }
     
-    window.addEventListener("beforeunload", async function(event){
-        var direccion = '{{nom}}';
-        var partes = direccion.split('/');
-        var url = "http://127.0.0.1:5000/delete";
-        let image={image:partes[partes.length-1]}
-        await fetch(url,{
-            method:'POST',
-            body:JSON.stringify(image)
-        });
-    });
 </script>
 {% endblock %}

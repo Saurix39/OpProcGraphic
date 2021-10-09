@@ -33,6 +33,7 @@
 
     top: 50%;
     transform: translateY(-60px);
+    z-index: 1;
 }
 .btn-styles > i{ 
     font-size: 30px;
