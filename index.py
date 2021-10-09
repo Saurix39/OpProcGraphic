@@ -13,7 +13,6 @@ import datetime
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-#CORS(app)
 numRestricciones = 1
 
 # RUTA INICIAL 
@@ -60,6 +59,7 @@ def dosFases(data):
     var_super = 0
     var_hol = 0
     var_arti = 0
+    infinito=True
     # VECTOR DE LOS ENCABEZADOS DE LA MATRIZ
     vec_head = []
     # SE HACE EL CONTEO DE LAS VARIABLES
@@ -68,6 +68,11 @@ def dosFases(data):
             cant_variables = cant_variables + 1
     # SE HACE EL CONTEO DE LAS VARIABLES ADICIONALES POR CADA RESTRICCÓN
     for res in restric:
+        if(res['op']=='>=' and float(res['x1']) < 0 and float(res['result'])<=0):
+            for clave in res:
+                if(clave != 'op'):
+                    res[clave]=str(0 if float(res[clave])==0 else float(res[clave])*(-1))
+            res['op']='<='
         if(res['op'] == '>='):
             var_super = var_super + 1
             var_arti = var_arti + 1
@@ -79,102 +84,71 @@ def dosFases(data):
         elif(res['op'] == '='):
             var_arti = var_arti + 1
             res['R'+str(var_arti)]=1
-    # SE AGREGAN X, S, R & Y AL VECTOR HEADER DEPENDIENDO DE LOS CONTEOS DE VARIABLES ANTERIORES
-    for i in range(cant_variables):
-        vec_head.append('x'+str(i+1))
-    for i in range(var_hol):
-        vec_head.append('H'+str(i+1))
-    for i in range(var_super):
-        vec_head.append('S'+str(i+1))
-    for i in range(0,var_arti):
-        vec_head.append('R'+str(i+1))
-    vec_head.append('Y')
-    # SE ARMA LA FILA PARA R0 Y LLENANDO LOS ESPACIOS NO DECLARADOS CON 0 
-    #vec_r0=[]
-    #for head in vec_head:
-    #    if('R0' == head):
-    #        vec_r0.append(1)
-    #    elif('R' in head):
-    #        vec_r0.append(-1)
-    #    else:
-    #        vec_r0.append(0)
-    #matriz.append(vec_r0)
-    # SE ARMA LA COLUMNA INICIAL QUE CONTIENE LOS NOMBRES DE CADA FILA
-    # SE ARMA CADA UNA DE LAS FILAS
-    column_ini=[]
-    for idx, res in enumerate(restric):
-        #column_ini.append('R'+str(idx+1))
-        #Vector de la restriccion
-        vec_res=[]
-        for head in vec_head:
-            if(head in res.keys()):
-                vec_res.append(float(res[head]))
-                if('R' in head):
-                    column_ini.append(head)
-                elif('H' in head):
-                    column_ini.append(head)
-            elif(head == 'Y'):
-                vec_res.append(float(res['result']))
-            else:
-                vec_res.append(float(0))
-        matriz.append(vec_res)
-    # SE INSTANCIA EL OBJETO DE TIPO MATRIZ QUE CONTIENE LA MATRIZ A UTILIZAR
-    fila_cj = [0,0,0,0,-1,-1]
-    obj_matriz = Matriz(vec_head, column_ini , matriz, Minmax, func_obj)
-    matrices_fase1=obj_matriz.fase1()
-    matrices_fase2=obj_matriz.fase2()
-    for value in matrices_fase2:
-        value.imprimir()
+        if(res['op']=='<=' or res['op']=='='):
+            infinito=False
+    if(infinito == True and Minmax=='max'):
+        return render_template("error.html")
+    else:
+        # SE AGREGAN X, S, R & Y AL VECTOR HEADER DEPENDIENDO DE LOS CONTEOS DE VARIABLES ANTERIORES
+        for i in range(cant_variables):
+            vec_head.append('x'+str(i+1))
+        for i in range(var_hol):
+            vec_head.append('H'+str(i+1))
+        for i in range(var_super):
+            vec_head.append('S'+str(i+1))
+        for i in range(0,var_arti):
+            vec_head.append('R'+str(i+1))
+        vec_head.append('Y')
 
-    
-    func_obj = data.get('Funcion objetivo')
-    func_obj_x1 = float(func_obj['x1'])
-    func_obj_x2 = float(func_obj['x2'])
-    min_max = data.get('Minmax')
-    func_obj_ecua = Ecuacion(func_obj_x1, func_obj_x2, "=", 'Indefinido')
-    restricciones = []
-    for rest in restric:
-        restriccion=Ecuacion(float(rest['x1']),float(rest['x2']),rest['op'],float(rest['result']))
-        restricciones.append(restriccion)
-    print("_______________")
-    arrays_restric = mapearRestric(restric)
-    new_FO = mapearFuncObjetivo(func_obj)
+        # SE ARMA LA COLUMNA INICIAL QUE CONTIENE LOS NOMBRES DE CADA FILA
+        # SE ARMA CADA UNA DE LAS FILAS
+        column_ini=[]
+        for res in restric:
+            #column_ini.append('R'+str(idx+1))
+            #Vector de la restriccion
+            vec_res=[]
+            for head in vec_head:
+                if(head in res.keys()):
+                    vec_res.append(float(res[head]))
+                    if('R' in head):
+                        column_ini.append(head)
+                    elif('H' in head):
+                        column_ini.append(head)
+                elif(head == 'Y'):
+                    vec_res.append(float(res['result']))
+                else:
+                    vec_res.append(float(0))
+            matriz.append(vec_res)
+        # SE INSTANCIA EL OBJETO DE TIPO MATRIZ QUE CONTIENE LA MATRIZ A UTILIZAR
+        obj_matriz = Matriz(vec_head, column_ini , matriz, Minmax, func_obj)
+        matrices_fase1=obj_matriz.fase1()
+        matrices_fase2=obj_matriz.fase2()
 
-    #return render_template('dosFases.html', matriz=matrices_fase1[0])
-    print(obj_matriz)
-    for mat in matrices_fase1:
-        print("____________fase1__________")
-        mat.imprimir()
-        print("Columna pivote")
-        print(mat.getColumnaPivote())
-        print("Renglon pivote")
-        print(mat.getRenglonPivote())
+        restricciones = []
+        for rest in restric:
+            restriccion=Ecuacion(float(rest['x1']),float(rest['x2']),rest['op'],float(rest['result']))
+            restricciones.append(restriccion)
+        print("_______________")
+        arrays_restric = mapearRestric(restric)
+        new_FO = mapearFuncObjetivo(func_obj)
 
-    for mat in matrices_fase2:
-        print("___________fase2___________")
-        mat.imprimir()
-    
+        #return render_template('dosFases.html', matriz=matrices_fase1[0])
+        print(obj_matriz)
+        for mat in matrices_fase1:
+            mat.imprimir()
+            print("____________fase1__________")
 
-    return render_template('dosFases.html',
-                           objMat1=matrices_fase1,
-                           objMat2=matrices_fase2,
-                           data_table = '',
-                           restricciones= arrays_restric[0],
-                           new_restric=arrays_restric[1],
-                           fo = new_FO,
-                           nom='',
-                           MaxMin= "Maximizar" if data.get('Minmax') == "max" else "Minimizar")
+        for mat in matrices_fase2:
+            mat.imprimir()
+            print("___________fase2___________")
+        
 
-    # SE LLAMA A LA FUNCION FASE1 QUE NOS DEVUELVE UNA LISTA DE MATRICES Y LA MATRIZ FINAL 
-    #if(var_arti > 1):
-    #    matriz_fase1, obj_matriz = fase1(obj_matriz)
-    # SE LLAMA A LA FUNCION FASE2
-    #fase2(obj_matriz, func_obj, Minmax)
+        return render_template('dosFases.html', objMat1=matrices_fase1, objMat2=matrices_fase2,data_table = '', restricciones= arrays_restric[0], new_restric=arrays_restric[1], fo = new_FO, nom='', MaxMin= "Maximizar" if data.get('Minmax') == "max" else "Minimizar")
 
 def mapearFuncObjetivo(func_objetivo):
     new_FO = ''
     for key, value in func_objetivo.items():
-        new_value = '+' + str(value) if int(value) > 0 and not 'x1' in key else value
+        new_value = '+' + str(value) if int(value) > 0 and not 'x1' in key else str(value)
         new_FO += (new_value + key + ' ').upper()
     return new_FO
 
@@ -187,11 +161,11 @@ def mapearRestric(restric):
         new_restric = ''
         for key, value in res.items():
             if key != 'op' and key != 'result':
-                new_value = '+' + str(value) if int(value) > 0 and not 'x1' in key else str(value)
+                new_value = '+' + str(value) if float(value) > 0 and not 'x1' in key else str(value)
                 new_restric += (new_value + key + ' ').upper()
             
             if key != 'op' and key != 'result' and 'x' in key:
-                old_value = '+' + str(value) if int(value) > 0 and not 'x1' in key else str(value)
+                old_value = '+' + str(value) if float(value) > 0 and not 'x1' in key else str(value)
                 old_restric += (old_value + key + ' ').upper()
                 
         new_restric += res['op'] + ' ' + res['result']
@@ -200,52 +174,6 @@ def mapearRestric(restric):
         old_array_restric.append(old_restric)
         
     return [old_array_restric, new_array_restric]
-
-
-# FUNCION PARA LA FASE 1
-def fase1(obj_mat):
-    matr_fa1=[]
-    #obj_mat.sumaR0()
-    #while(obj_mat.continua()):
-    obj_mat.column_pivot()
-    obj_mat.imprimir()
-    #obj_mat.filaPivote()
-    #obj_mat.setNewColumn()
-    #obj_mat.inverso()
-    #obj_mat.sumarFilas()
-    #matr_fa1.append(obj_mat)
-    #return matr_fa1, obj_mat
-
-# FUNCION PARA LA FASE 2
-def fase2(obj_mat, func_obj, Minmax):
-    obj_mat.imprimir()
-    obj_mat.eliminarCol()
-    obj_mat.eliminarFil()
-    #obj_mat.ordenar()
-    obj_mat.agreCabe()
-    obj_mat.agregColumnZ()
-    obj_mat.agregarZ(enconZ(func_obj))
-    obj_mat.restarEnZ()
-    if(Minmax=="max"):
-        while(obj_mat.continuaFaseDosMax()):
-            obj_mat.columnaPivoteFaseDosMax()
-            obj_mat.filaPivote(True)
-            obj_mat.setNewColumn()
-            obj_mat.inverso()
-            obj_mat.sumarFilas()
-    elif(Minmax=="min"):
-        while(obj_mat.continuaFaseDosMin()):
-            obj_mat.columnaPivoteFaseDosMin()
-            obj_mat.filaPivote(True)
-            obj_mat.setNewColumn()
-            obj_mat.inverso()
-            obj_mat.sumarFilas()
-    obj_mat.imprimir()
-
-# DEVUELVE LA FILA PARA Z LA CUAL ES LA FUNCION OBJETIVO DESPEJADA
-# Z-X1-X2-X3 = 0
-def enconZ(func_obj):
-    return [1]+list((float(i)*(-1.0) for i in func_obj.values()))
 
 def grafico(data):
 
