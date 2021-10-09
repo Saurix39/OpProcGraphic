@@ -108,34 +108,34 @@ Método gráfico
         }
     }
 
-    var toFraction = function (dec) {
-        var is_neg = dec < 0;
-        dec = Math.abs(dec);
-        var done = false;
-        //you can adjust the epsilon to a larger number if you don't need very high precision
-        var n1 = 0, d1 = 1, n2 = 1, d2 = 0, n = 0, q = dec, epsilon = 1e-13;
-        while (!done) {
-            n++;
-            if (n > 10000) {
-                done = true;
+    var toFraction = function (decimal) {
+        var negative = decimal < 0;
+        decimal = Math.abs(decimal);
+        var final = false;
+        
+        var value1 = 0, aux1 = 1, value2 = 1, aux2 = 0, epoch = 0, val = decimal, epsilon = 1e-13;
+        while (!final) {
+            epoch++;
+            if (epoch > 10000) {
+                final = true;
             }
-            var a = parseInt(q);
-            var num = n1 + a * n2;
-            var den = d1 + a * d2;
-            var e = (q - a);
-            if (e < epsilon) {
-                done = true;
+            var valint = parseInt(val);
+            var result = value1 + valint * value2;
+            var denom = aux1 + valint * aux2;
+            var conv = (val - valint);
+            if (conv < epsilon) {
+                final = true;
             }
-            q = 1 / e;
-            n1 = n2;
-            d1 = d2;
-            n2 = num;
-            d2 = den;
-            if (Math.abs(num / den - dec) < epsilon || n > 30) {
-                done = true;
+            val = 1 / conv;
+            value1 = value2;
+            aux1 = aux2;
+            value2 = result;
+            aux2 = denom;
+            if (Math.abs(result / denom - decimal) < epsilon || epoch > 30) {
+                final = true;
             }
         }
-        return [is_neg ? -num : num, den];
+        return [negative ? -result : result, denom];
     };
 
     function toDecimal(frac){
